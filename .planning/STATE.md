@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2025-01-20)
 
 **Core value:** Instantly verify responsive design without manual testing
-**Current focus:** Phase 8 - CLI Interface (in progress)
+**Current focus:** Phase 9 - UX Polish (ready to start)
 
 ---
 
@@ -13,21 +13,21 @@ See: .planning/PROJECT.md (updated 2025-01-20)
 
 | Metric | Value |
 |--------|-------|
-| Current Phase | 8 (in progress) |
-| Phases Complete | 7/10 |
-| Requirements Complete | 15/24 |
-| Overall Progress | 70% |
+| Current Phase | 8 (complete) |
+| Phases Complete | 8/10 |
+| Requirements Complete | 18/24 |
+| Overall Progress | 80% |
 
 ---
 
 ## Current Position
 
-Phase: 8 of 10 (CLI Interface)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-20 - Completed Plan 08-02
+Phase: 8 of 10 (CLI Interface) - COMPLETE
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-20 - Completed Plan 08-03
 
-Progress: [====================          ] 2/3 plans in phase 8
+Progress: [==============================] 3/3 plans in phase 8
 
 ---
 
@@ -42,7 +42,7 @@ Progress: [====================          ] 2/3 plans in phase 8
 | 5 | Parallel Execution | Complete | 2/2 plans |
 | 6 | File Output | Complete | 2/2 plans |
 | 7 | HTML Report | Complete | 2/2 plans |
-| 8 | CLI Interface | In Progress | 2/3 plans |
+| 8 | CLI Interface | Complete | 3/3 plans |
 | 9 | UX Polish | Pending | 0% |
 | 10 | Integration | Pending | 0% |
 
@@ -105,7 +105,9 @@ Progress: [====================          ] 2/3 plans in phase 8
 | 08-01 | createProgram factory for testability | Allows testing without global state |
 | 08-02 | Progress output via stdout.write with carriage return | Phase 9 will add spinner |
 | 08-02 | Browser cleanup in finally block | Ensures resources released even on error |
-| 08-02 | Re-exports in index.ts for testability | Allows importing from cli/index.js in tests
+| 08-02 | Re-exports in index.ts for testability | Allows importing from cli/index.js in tests |
+| 08-03 | Fresh Commander instance per test | Prevents state leakage between tests |
+| 08-03 | Test validates behavior not implementation | Use error regex patterns not exact strings |
 
 ---
 
@@ -118,7 +120,7 @@ None
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 08-02-PLAN.md (CLI action handler)
+Stopped at: Completed 08-03-PLAN.md (CLI tests) - Phase 8 complete
 Resume file: None
 
 ---
@@ -161,12 +163,14 @@ Resume file: None
 | 2026-01-20 | Phase 7 complete | All 2 plans executed, 168 total tests passing |
 | 2026-01-20 | Plan 08-01 completed | CLI foundation (3 commits, types/validation/commands) |
 | 2026-01-20 | Plan 08-02 completed | CLI action handler (3 commits, runCapture/handleError) |
+| 2026-01-20 | Plan 08-03 completed | CLI tests (2 commits, 66 tests) |
+| 2026-01-20 | Phase 8 complete | All 3 plans executed, 234 total tests passing |
 
 ---
 
 ## Next Action
 
-`/gsd:execute-phase 08-03` - Execute CLI tests plan
+`/gsd:plan-phase 09` - Plan UX Polish phase
 
 ---
 *Last updated: 2026-01-20*
