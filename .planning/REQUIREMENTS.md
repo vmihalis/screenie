@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **SHOT-01**: Tool captures full-page screenshots (entire scrollable content)
 - [ ] **SHOT-02**: Tool runs captures in parallel with configurable concurrency (default 10)
-- [ ] **SHOT-03**: Tool disables CSS animations before capture for consistency
+- [x] **SHOT-03**: Tool disables CSS animations before capture for consistency
 - [ ] **SHOT-04**: Tool retries failed captures automatically (2-3 attempts)
 
 ### Device Support
@@ -39,8 +39,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Page Loading
 
 - [x] **LOAD-01**: Tool waits for network idle before capture
-- [ ] **LOAD-02**: Tool adds configurable buffer after network idle (default 500ms)
-- [ ] **LOAD-03**: Tool scrolls through page to trigger lazy-loaded content
+- [x] **LOAD-02**: Tool adds configurable buffer after network idle (default 500ms)
+- [x] **LOAD-03**: Tool scrolls through page to trigger lazy-loaded content
 - [x] **LOAD-04**: Tool enforces max timeout (30s) to prevent hanging
 - [ ] **LOAD-05**: Tool supports custom wait flag (--wait ms)
 
@@ -90,7 +90,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | SHOT-01 | Phase 3 | Complete |
 | SHOT-02 | Phase 5 | Pending |
-| SHOT-03 | Phase 4 | Pending |
+| SHOT-03 | Phase 4 | Complete |
 | SHOT-04 | Phase 5 | Pending |
 | DEV-01 | Phase 2 | Complete |
 | DEV-02 | Phase 6 | Pending |
@@ -106,8 +106,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUT-05 | Phase 7 | Pending |
 | OUT-06 | Phase 10 | Pending |
 | LOAD-01 | Phase 3 | Complete |
-| LOAD-02 | Phase 4 | Pending |
-| LOAD-03 | Phase 4 | Pending |
+| LOAD-02 | Phase 4 | Complete |
+| LOAD-03 | Phase 4 | Complete |
 | LOAD-04 | Phase 3 | Complete |
 | LOAD-05 | Phase 8 | Pending |
 | UX-01 | Phase 9 | Pending |
@@ -121,4 +121,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2025-01-20*
-*Last updated: 2025-01-20 after roadmap creation*
+*Last updated: 2026-01-20 after Phase 4 completion*
