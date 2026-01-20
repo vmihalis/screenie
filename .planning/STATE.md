@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2025-01-20)
 
 **Core value:** Instantly verify responsive design without manual testing
-**Current focus:** Phase 3 Complete - Browser Engine
+**Current focus:** Phase 4 - Page Loading
 
 ---
 
@@ -13,21 +13,21 @@ See: .planning/PROJECT.md (updated 2025-01-20)
 
 | Metric | Value |
 |--------|-------|
-| Current Phase | 3 (complete) |
+| Current Phase | 4 (in progress) |
 | Phases Complete | 3/10 |
-| Requirements Complete | 4/24 |
-| Overall Progress | 30% |
+| Requirements Complete | 5/24 |
+| Overall Progress | 33% |
 
 ---
 
 ## Current Position
 
-Phase: 3 of 10 (Browser Engine)
-Plan: 3 of 3 in current phase
-Status: Phase 3 Complete
-Last activity: 2026-01-20 - Completed Plan 03-03
+Phase: 4 of 10 (Page Loading)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-20 - Completed Plan 04-01
 
-Progress: [==============================] 3/3 plans in phase 3
+Progress: [==========                    ] 1/3 plans in phase 4
 
 ---
 
@@ -38,7 +38,7 @@ Progress: [==============================] 3/3 plans in phase 3
 | 1 | Project Setup | Complete | 4/4 plans |
 | 2 | Device Registry | Complete | 4/4 plans |
 | 3 | Browser Engine | Complete | 3/3 plans |
-| 4 | Page Loading | Pending | 0% |
+| 4 | Page Loading | In Progress | 1/3 plans |
 | 5 | Parallel Execution | Pending | 0% |
 | 6 | File Output | Pending | 0% |
 | 7 | HTML Report | Pending | 0% |
@@ -70,6 +70,9 @@ Progress: [==============================] 3/3 plans in phase 3
 | 03-02 | scale: 'css' for screenshots | Consistent file sizes across DPRs |
 | 03-03 | Non-routable IP for timeout tests | 10.255.255.1 causes reliable connection timeout vs short timeout on fast sites |
 | 03-03 | Integration-style tests with real browser | Verifies actual Playwright behavior, not mocked |
+| 04-01 | waitBuffer defaults to 500ms | Reasonable balance between speed and stability |
+| 04-01 | Timeout budget 70/15/15 split | Navigation/buffer+scroll/screenshot to accommodate buffer |
+| 04-01 | animations: 'disabled' for all screenshots | Playwright built-in handles finite/infinite correctly |
 
 ---
 
@@ -82,7 +85,7 @@ None
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 03-03-PLAN.md (Phase 3 tests complete)
+Stopped at: Completed 04-01-PLAN.md (waitBuffer and animation disabling)
 Resume file: None
 
 ---
@@ -109,12 +112,13 @@ Resume file: None
 | 2026-01-20 | Plan 03-02 completed | captureScreenshot with networkidle, full-page (2 commits) |
 | 2026-01-20 | Phase 3 complete | Browser Engine ready for page loading phase |
 | 2026-01-20 | Plan 03-03 completed | Browser engine unit tests (26 tests, 2 commits) |
+| 2026-01-20 | Plan 04-01 completed | waitBuffer usage and animations: 'disabled' (1 commit) |
 
 ---
 
 ## Next Action
 
-`/gsd:plan-phase 4` - Plan Page Loading phase
+`/gsd:execute-phase 4` - Continue executing Page Loading phase (plan 04-02)
 
 ---
 *Last updated: 2026-01-20*
