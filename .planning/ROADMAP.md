@@ -111,10 +111,10 @@ Plans:
   1. `npm info screenie` returns package metadata
   2. npm package has provenance badge (signed by GitHub Actions)
   3. `npx screenie --help` works for new users without prior installation
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 16-01: TBD
+- [ ] 16-01-PLAN.md — Create GitHub Actions workflow and publish to npm with provenance
 
 ## Progress
 
@@ -129,9 +129,9 @@ Phases execute in numeric order: 11 -> 12 -> 13 -> 14 -> 15 -> 16
 | 13. README Polish | 1/1 | ✓ Complete | 2026-01-20 |
 | 14. Landing Page | 2/2 | ✓ Complete | 2026-01-20 |
 | 15. Documentation | 2/2 | ✓ Complete | 2026-01-20 |
-| 16. Publish | 0/? | Not started | - |
+| 16. Publish | 0/1 | Planned | - |
 
 ---
 
 *Created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 15 planning*
+*Last updated: 2026-01-20 after Phase 16 planning*
