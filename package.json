@@ -1,0 +1,39 @@
+{
+  "name": "responsiveness-mcp",
+  "version": "1.0.0",
+  "description": "CLI tool for capturing responsive design screenshots using Playwright",
+  "type": "module",
+  "bin": {
+    "responsive-capture": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli/index.ts",
+    "build": "tsup",
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.51.0",
+    "commander": "^12.0.0",
+    "p-limit": "^6.0.0",
+    "ora": "^8.0.0",
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "responsive",
+    "screenshot",
+    "playwright",
+    "cli",
+    "design",
+    "testing"
+  ],
+  "license": "MIT"
+}
