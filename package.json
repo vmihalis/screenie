@@ -24,6 +24,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke-test": "tsx scripts/smoke-test.ts",
+    "demo": "vhs demo/demo.tape && gifsicle -O3 --lossy=80 demo/demo.gif -o demo/demo.gif",
     "postinstall": "playwright install chromium",
     "prepublishOnly": "npm run build && npm run test"
   },
