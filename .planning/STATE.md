@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Instantly verify responsive design without manual testing
-**Current focus:** v2.0 Web Platform — screenie.xyz + documentation
+**Current focus:** v2.0 Open Source Release — rebrand, npm, landing page, docs
 
 ---
 

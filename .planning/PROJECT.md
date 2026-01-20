@@ -2,22 +2,22 @@
 
 ## What This Is
 
-A responsive design testing tool available as both a CLI and web application at screenie.xyz. Captures full-page screenshots across 57 device dimensions, organizes them by category (phones, tablets, desktops), and generates HTML reports for quick visual review. Users can either clone the GitHub repo to run locally or paste a URL on the website to get instant results.
+An open source CLI tool that captures responsive screenshots across 57 device dimensions and generates HTML reports for quick visual review. Available via npm (`npx screenie`) with documentation at docs.screenie.xyz and a landing page at screenie.xyz showcasing the tool.
 
 ## Core Value
 
-Instantly verify that a web app looks correct across all device sizes without manual testing — run one command or paste one URL, review one report.
+Instantly verify that a web app looks correct across all device sizes without manual testing — run one command, review one report.
 
-## Current Milestone: v2.0 Web Platform
+## Current Milestone: v2.0 Open Source Release
 
-**Goal:** Transform Screenie from a CLI tool into a public web platform with documentation, enabling anyone to verify responsive designs via screenie.xyz or the npm package.
+**Goal:** Polish and publish Screenie as a professional open source tool with npm package, landing page, and documentation site.
 
 **Target features:**
-- Web application at screenie.xyz where users paste a URL and get screenshot reports
-- Full documentation site with guides, examples, and API reference
-- Simple, clean UI for the web tool
-- Basic rate limiting to prevent abuse
-- Backend that runs Playwright for web users
+- Rebrand to "Screenie" (package name, CLI command, all references)
+- Publish to npm for easy installation (`npx screenie` or global install)
+- Landing page at screenie.xyz (minimal hero, demo GIF/video, links)
+- Documentation site at docs.screenie.xyz (full guides and reference)
+- Demo GIF/video showing the tool in action
 
 ## Requirements
 
@@ -51,17 +51,16 @@ Instantly verify that a web app looks correct across all device sizes without ma
 
 ### Active
 
-- [ ] Web application at screenie.xyz
-- [ ] URL input form with device selection
-- [ ] Backend API running Playwright
-- [ ] View results inline on website
-- [ ] Download HTML report from website
-- [ ] Basic rate limiting (requests per IP per hour)
-- [ ] Full documentation site (VitePress/similar)
+- [ ] Rebrand to "screenie" (package.json name, CLI command, README, all references)
+- [ ] Publish to npm with proper package metadata
+- [ ] Landing page at screenie.xyz (minimal hero, demo, links)
+- [ ] Demo GIF/video showing CLI in action with results
+- [ ] Documentation site at docs.screenie.xyz (VitePress)
 - [ ] Getting started guide
 - [ ] CLI reference documentation
-- [ ] API reference for programmatic usage
-- [ ] Example gallery showing reports
+- [ ] Programmatic usage guide
+- [ ] Device presets reference
+- [ ] Deploy landing page and docs to Vercel/Netlify
 
 ### Future (v2.1+)
 
@@ -74,11 +73,11 @@ Instantly verify that a web app looks correct across all device sizes without ma
 
 ### Out of Scope
 
+- Hosted web application — users run CLI locally
+- Backend/API — no server-side screenshot capture
 - Visual regression/diff comparison — Percy/Applitools territory
 - Real device cloud testing — BrowserStack domain
-- Interactive browser/DevTools — Responsively App niche
-- User accounts/authentication — keep it simple, no login required
-- Saved history — stateless, run and download
+- User accounts/authentication — open source tool, no login
 - Cross-browser (Firefox/Safari) — Chrome sufficient for layout verification
 - PDF/video export — focus on screenshots + HTML
 
@@ -88,7 +87,7 @@ v1.0 shipped with 5,954 LOC TypeScript, 291 tests passing.
 Tech stack: Node.js 20+, Playwright (Chromium), TypeScript, tsup, Vitest.
 57 device presets covering flagship phones (iPhone 15/16, Pixel 8, Galaxy S24), tablets (iPad Pro, Galaxy Tab), and common desktop resolutions.
 
-v2.0 adds a web platform layer. The existing CLI core remains unchanged — the website wraps the same screenshot engine with a web frontend and API.
+v2.0 focuses on open source release — rebranding, npm publishing, and professional documentation. The CLI core remains unchanged; this milestone adds discoverability and polish for public use.
 
 ## Constraints
 
