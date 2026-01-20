@@ -11,7 +11,7 @@
 |---|-------|------|--------------|-------|--------|
 | 1 | Project Setup | Initialize TypeScript project with Playwright | - | 4 | Complete |
 | 2 | Device Registry | Define 50+ device presets with categorization | DEV-01 | 4 | Complete |
-| 3 | Browser Engine | Core screenshot capture with Playwright | SHOT-01, LOAD-01, LOAD-04 | 5-7 | Pending |
+| 3 | Browser Engine | Core screenshot capture with Playwright | SHOT-01, LOAD-01, LOAD-04 | 3 | Planned |
 | 4 | Page Loading | Smart waiting and lazy content handling | LOAD-02, LOAD-03, SHOT-03 | 4-6 | Pending |
 | 5 | Parallel Execution | Concurrent captures with retry logic | SHOT-02, SHOT-04 | 4-6 | Pending |
 | 6 | File Output | Organized folder structure and file naming | DEV-02, OUT-01 | 3-5 | Pending |
@@ -78,6 +78,13 @@
 **Goal:** Core screenshot capture with Playwright browser management
 
 **Requirements:** SHOT-01, LOAD-01, LOAD-04
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md - BrowserManager + engine types (foundation)
+- [ ] 03-02-PLAN.md - captureScreenshot implementation
+- [ ] 03-03-PLAN.md - Unit tests for browser engine
 
 **Success Criteria:**
 1. Browser launches once and creates multiple contexts
