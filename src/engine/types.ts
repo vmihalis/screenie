@@ -37,6 +37,10 @@ export interface CaptureOptions {
   device: Device;
   timeout: number;
   waitBuffer: number;
+  /** Whether to scroll for lazy-loaded content (default: true) */
+  scrollForLazy?: boolean;
+  /** Max scroll iterations to prevent infinite scroll hangs (default: 10) */
+  maxScrollIterations?: number;
 }
 
 /**
