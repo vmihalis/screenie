@@ -39,6 +39,9 @@ export function createProgram(): Command {
     // Output
     .option('-o, --output <dir>', 'Output directory (default: ./screenshots)')
 
+    // Browser auto-open control
+    .option('--no-open', 'Suppress auto-opening report in browser')
+
     // Help examples
     .addHelpText(
       'after',
@@ -49,6 +52,7 @@ Examples:
   $ responsive-capture https://example.com --pages /home /about /contact
   $ responsive-capture http://localhost:3000 --phones-only --concurrency 5
   $ responsive-capture http://localhost:3000 --wait 1000 --output ./my-screenshots
+  $ responsive-capture http://localhost:3000 --no-open  # CI mode, don't open browser
 `
     );
 
