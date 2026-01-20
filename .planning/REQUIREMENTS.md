@@ -46,9 +46,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### UX & Polish
 
-- [ ] **UX-01**: Tool shows progress indicators during capture
-- [ ] **UX-02**: Tool auto-hides common cookie consent banners
-- [ ] **UX-03**: Tool provides clear error messages for failures
+- [x] **UX-01**: Tool shows progress indicators during capture
+- [x] **UX-02**: Tool auto-hides common cookie consent banners
+- [x] **UX-03**: Tool provides clear error messages for failures
 
 ## v2 Requirements
 
@@ -110,9 +110,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOAD-03 | Phase 4 | Complete |
 | LOAD-04 | Phase 3 | Complete |
 | LOAD-05 | Phase 8 | Complete |
-| UX-01 | Phase 9 | Pending |
-| UX-02 | Phase 9 | Pending |
-| UX-03 | Phase 9 | Pending |
+| UX-01 | Phase 9 | Complete |
+| UX-02 | Phase 9 | Complete |
+| UX-03 | Phase 9 | Complete |
 
 **Coverage:**
 - v1 requirements: 24 total
@@ -121,4 +121,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2025-01-20*
-*Last updated: 2026-01-20 after Phase 8 completion*
+*Last updated: 2026-01-20 after Phase 9 completion*
