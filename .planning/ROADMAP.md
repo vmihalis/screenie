@@ -12,7 +12,7 @@
 | 1 | Project Setup | Initialize TypeScript project with Playwright | - | 4 | Complete |
 | 2 | Device Registry | Define 50+ device presets with categorization | DEV-01 | 4 | Complete |
 | 3 | Browser Engine | Core screenshot capture with Playwright | SHOT-01, LOAD-01, LOAD-04 | 3 | Complete |
-| 4 | Page Loading | Smart waiting and lazy content handling | LOAD-02, LOAD-03, SHOT-03 | 4-6 | Pending |
+| 4 | Page Loading | Smart waiting and lazy content handling | LOAD-02, LOAD-03, SHOT-03 | 4 | Planned |
 | 5 | Parallel Execution | Concurrent captures with retry logic | SHOT-02, SHOT-04 | 4-6 | Pending |
 | 6 | File Output | Organized folder structure and file naming | DEV-02, OUT-01 | 3-5 | Pending |
 | 7 | HTML Report | Grid view report with thumbnails and metadata | OUT-02, OUT-03, OUT-04, OUT-05 | 5-7 | Pending |
@@ -101,6 +101,15 @@
 **Goal:** Smart waiting strategies and lazy content handling
 
 **Requirements:** LOAD-02, LOAD-03, SHOT-03
+
+**Status:** Planned (2026-01-20)
+**Plans:** 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Wait buffer and animation disabling
+- [ ] 04-02-PLAN.md — Scroll helper for lazy content
+- [ ] 04-03-PLAN.md — Integrate scroll into capturer
+- [ ] 04-04-PLAN.md — Unit tests for page loading
 
 **Success Criteria:**
 1. Page waits additional buffer (500ms) after network idle
