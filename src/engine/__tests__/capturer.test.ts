@@ -223,4 +223,70 @@ describe('captureScreenshot', () => {
       expect(desktopResult.buffer).toBeDefined();
     });
   });
+
+  describe('page loading features', () => {
+    it('should capture with scrollForLazy enabled (default)', async () => {
+      const options: CaptureOptions = {
+        url: 'https://example.com',
+        device: testPhone,
+        timeout: DEFAULT_TIMEOUT,
+        waitBuffer: 500,
+        // scrollForLazy defaults to true
+      };
+
+      const result = await captureScreenshot(manager, options);
+
+      expect(result.success).toBe(true);
+      expect(result.buffer).toBeDefined();
+    });
+
+    it('should capture with scrollForLazy disabled', async () => {
+      const options: CaptureOptions = {
+        url: 'https://example.com',
+        device: testPhone,
+        timeout: DEFAULT_TIMEOUT,
+        waitBuffer: 500,
+        scrollForLazy: false,
+      };
+
+      const result = await captureScreenshot(manager, options);
+
+      expect(result.success).toBe(true);
+      expect(result.buffer).toBeDefined();
+    });
+
+    it('should respect custom maxScrollIterations', async () => {
+      const options: CaptureOptions = {
+        url: 'https://example.com',
+        device: testPhone,
+        timeout: DEFAULT_TIMEOUT,
+        waitBuffer: 500,
+        scrollForLazy: true,
+        maxScrollIterations: 2,
+      };
+
+      const result = await captureScreenshot(manager, options);
+
+      expect(result.success).toBe(true);
+      expect(result.buffer).toBeDefined();
+    });
+
+    it('should apply wait buffer', async () => {
+      const options: CaptureOptions = {
+        url: 'https://example.com',
+        device: testPhone,
+        timeout: DEFAULT_TIMEOUT,
+        waitBuffer: 100, // Short buffer for faster test
+        scrollForLazy: false, // Skip scroll to isolate buffer test
+      };
+
+      const start = Date.now();
+      const result = await captureScreenshot(manager, options);
+      const duration = Date.now() - start;
+
+      expect(result.success).toBe(true);
+      // Should take at least the buffer time (100ms) plus navigation
+      expect(duration).toBeGreaterThan(100);
+    });
+  });
 });
