@@ -17,7 +17,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Device Support
 
 - [x] **DEV-01**: Tool includes 50+ built-in device presets (phones, tablets, desktops)
-- [ ] **DEV-02**: Tool organizes screenshots into phones/tablets/pc-laptops folders
+- [x] **DEV-02**: Tool organizes screenshots into phones/tablets/pc-laptops folders
 - [ ] **DEV-03**: Tool supports device filtering flags (--phones-only, --tablets-only, --desktops-only)
 
 ### CLI Interface
@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Output & Report
 
-- [ ] **OUT-01**: Tool saves screenshots with descriptive names (device-name-widthxheight.png)
+- [x] **OUT-01**: Tool saves screenshots with descriptive names (device-name-widthxheight.png)
 - [ ] **OUT-02**: Tool generates HTML report with grid view of all screenshots
 - [ ] **OUT-03**: Tool groups screenshots by device category in report
 - [ ] **OUT-04**: Tool shows thumbnails in report for quick scanning
@@ -93,13 +93,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHOT-03 | Phase 4 | Complete |
 | SHOT-04 | Phase 5 | Complete |
 | DEV-01 | Phase 2 | Complete |
-| DEV-02 | Phase 6 | Pending |
+| DEV-02 | Phase 6 | Complete |
 | DEV-03 | Phase 8 | Pending |
 | CLI-01 | Phase 8 | Pending |
 | CLI-02 | Phase 8 | Pending |
 | CLI-03 | Phase 8 | Pending |
 | CLI-04 | Phase 8 | Pending |
-| OUT-01 | Phase 6 | Pending |
+| OUT-01 | Phase 6 | Complete |
 | OUT-02 | Phase 7 | Pending |
 | OUT-03 | Phase 7 | Pending |
 | OUT-04 | Phase 7 | Pending |
@@ -121,4 +121,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2025-01-20*
-*Last updated: 2026-01-20 after Phase 5 completion*
+*Last updated: 2026-01-20 after Phase 6 completion*

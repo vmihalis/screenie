@@ -15,7 +15,7 @@ See: .planning/PROJECT.md (updated 2025-01-20)
 |--------|-------|
 | Current Phase | 6 (complete) |
 | Phases Complete | 6/10 |
-| Requirements Complete | 13/24 |
+| Requirements Complete | 11/24 |
 | Overall Progress | 60% |
 
 ---
@@ -147,7 +147,7 @@ Resume file: None
 
 ## Next Action
 
-`/gsd:execute-phase 07-01` - Execute HTML report plan
+`/gsd:plan-phase 07` - Plan HTML Report phase
 
 ---
 *Last updated: 2026-01-20*
