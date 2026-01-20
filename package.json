@@ -11,10 +11,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/memehalis/screenie.git"
+    "url": "git+https://github.com/vmihalis/responsiveness-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/memehalis/screenie/issues"
+    "url": "https://github.com/vmihalis/responsiveness-mcp/issues"
   },
   "homepage": "https://screenie.xyz",
   "author": "memehalis",
@@ -25,6 +25,9 @@
     "test:watch": "vitest",
     "smoke-test": "tsx scripts/smoke-test.ts",
     "demo": "vhs demo/demo.tape && gifsicle -O3 --lossy=80 demo/demo.gif -o demo/demo.gif",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "postinstall": "playwright install chromium",
     "prepublishOnly": "npm run build && npm run test"
   },
@@ -43,6 +46,7 @@
     "tsup": "^8.0.0",
     "tsx": "^4.0.0",
     "typescript": "^5.4.0",
+    "vitepress": "^2.0.0-alpha.15",
     "vitest": "^2.0.0"
   },
   "engines": {
