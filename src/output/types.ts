@@ -56,3 +56,19 @@ export interface SaveAllResult {
   /** Count of files that failed to save */
   failedCount: number;
 }
+
+/**
+ * Screenshot data prepared for HTML report generation
+ */
+export interface ScreenshotForReport {
+  /** Device display name */
+  deviceName: string;
+  /** Device category for grouping */
+  category: DeviceCategory;
+  /** Viewport width */
+  width: number;
+  /** Viewport height */
+  height: number;
+  /** Base64 data URI (data:image/png;base64,...) */
+  dataUri: string;
+}
