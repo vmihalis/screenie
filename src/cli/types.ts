@@ -18,6 +18,8 @@ export interface CLIOptions {
   desktopsOnly?: boolean;
   /** Output directory override */
   output?: string;
+  /** Suppress auto-open of report in browser (set by --no-open flag) */
+  open?: boolean;
 }
 
 /**
