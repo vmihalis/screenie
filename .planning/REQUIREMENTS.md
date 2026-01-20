@@ -16,7 +16,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Device Support
 
-- [ ] **DEV-01**: Tool includes 50+ built-in device presets (phones, tablets, desktops)
+- [x] **DEV-01**: Tool includes 50+ built-in device presets (phones, tablets, desktops)
 - [ ] **DEV-02**: Tool organizes screenshots into phones/tablets/pc-laptops folders
 - [ ] **DEV-03**: Tool supports device filtering flags (--phones-only, --tablets-only, --desktops-only)
 
@@ -92,7 +92,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHOT-02 | Phase 5 | Pending |
 | SHOT-03 | Phase 4 | Pending |
 | SHOT-04 | Phase 5 | Pending |
-| DEV-01 | Phase 2 | Pending |
+| DEV-01 | Phase 2 | Complete |
 | DEV-02 | Phase 6 | Pending |
 | DEV-03 | Phase 8 | Pending |
 | CLI-01 | Phase 8 | Pending |
