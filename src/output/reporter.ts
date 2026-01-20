@@ -343,13 +343,54 @@ function buildReportHtml(
 </html>`;
 }
 
-// Placeholder for generateReport function (Task 4)
-
+/**
+ * Generate HTML report and write to output directory
+ * @param data Report metadata (URL, timestamp, duration, device count)
+ * @param screenshots Array of screenshots with base64 data URIs
+ * @param outputPath Directory to write report.html to
+ * @returns Full path to the generated report file
+ */
 export async function generateReport(
-  _data: ReportData,
-  _screenshots: ScreenshotForReport[],
-  _outputPath: string
+  data: ReportData,
+  screenshots: ScreenshotForReport[],
+  outputPath: string
 ): Promise<string> {
-  // Will be implemented in Task 4
-  return _outputPath;
+  const html = buildReportHtml(data, screenshots);
+  const reportPath = join(outputPath, 'report.html');
+  await writeFile(reportPath, html, 'utf-8');
+  return reportPath;
+}
+
+/**
+ * Convert execution results to report-ready screenshots
+ * Filters to successful results only and adds base64 data URIs
+ * @param results Execution results from parallel capture
+ * @param devices Device list for metadata lookup
+ * @returns Array of screenshots ready for report generation
+ */
+export function prepareScreenshotsForReport(
+  results: ExecutionResult[],
+  devices: Device[]
+): ScreenshotForReport[] {
+  const deviceMap = new Map<string, Device>();
+  for (const device of devices) {
+    deviceMap.set(device.name, device);
+  }
+
+  const screenshots: ScreenshotForReport[] = [];
+  for (const result of results) {
+    if (!result.success || !result.buffer) continue;
+    const device = deviceMap.get(result.deviceName);
+    if (!device) continue;
+
+    screenshots.push({
+      deviceName: device.name,
+      category: device.category,
+      width: device.width,
+      height: device.height,
+      dataUri: bufferToDataUri(result.buffer),
+    });
+  }
+
+  return screenshots;
 }
