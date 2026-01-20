@@ -17,7 +17,7 @@
 | 6 | File Output | Organized folder structure and file naming | DEV-02, OUT-01 | 2 | Complete |
 | 7 | HTML Report | Grid view report with thumbnails and metadata | OUT-02, OUT-03, OUT-04, OUT-05 | 2 | Complete |
 | 8 | CLI Interface | Command parsing with flags and validation | CLI-01, CLI-02, CLI-03, CLI-04, LOAD-05, DEV-03 | 3 | Complete |
-| 9 | UX Polish | Progress indicators, cookie hiding, error messages | UX-01, UX-02, UX-03 | 4-6 | Pending |
+| 9 | UX Polish | Progress indicators, cookie hiding, error messages | UX-01, UX-02, UX-03 | 3 | Planned |
 | 10 | Integration | Wire everything, auto-open report, end-to-end testing | OUT-06 | 4-6 | Pending |
 
 ---
@@ -239,6 +239,14 @@
 **Goal:** Progress feedback, cookie handling, and error UX
 
 **Requirements:** UX-01, UX-02, UX-03
+
+**Status:** Planned
+**Plans:** 3 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Progress spinner with ora (UX-01)
+- [ ] 09-02-PLAN.md — Cookie banner auto-hiding (UX-02)
+- [ ] 09-03-PLAN.md — Error formatting and failure summary (UX-03)
 
 **Success Criteria:**
 1. Terminal shows progress: "Capturing 12/50: iPhone 14 Pro..."
