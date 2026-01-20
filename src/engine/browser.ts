@@ -1,10 +1,25 @@
-// Browser manager - placeholder for Phase 3
+import { chromium, Browser } from 'playwright';
+
 export class BrowserManager {
-  async launch(): Promise<void> {
-    // Will launch Playwright browser
+  private browser: Browser | null = null;
+
+  async launch(): Promise<Browser> {
+    this.browser = await chromium.launch();
+    return this.browser;
   }
 
   async close(): Promise<void> {
-    // Will close browser
+    if (this.browser) {
+      await this.browser.close();
+      this.browser = null;
+    }
   }
+
+  getBrowser(): Browser | null {
+    return this.browser;
+  }
+}
+
+export async function launchBrowser(): Promise<Browser> {
+  return chromium.launch();
 }
