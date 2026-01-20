@@ -62,7 +62,7 @@ describe('CLI E2E', () => {
       const result = await invokeCli(['--help']);
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toContain('responsive-capture');
+      expect(result.stdout).toContain('screenie');
       expect(result.stdout).toContain('<url>');
       expect(result.stdout).toContain('--no-open');
     });
