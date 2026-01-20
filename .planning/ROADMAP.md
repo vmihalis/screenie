@@ -13,7 +13,7 @@
 | 2 | Device Registry | Define 50+ device presets with categorization | DEV-01 | 4 | Complete |
 | 3 | Browser Engine | Core screenshot capture with Playwright | SHOT-01, LOAD-01, LOAD-04 | 3 | Complete |
 | 4 | Page Loading | Smart waiting and lazy content handling | LOAD-02, LOAD-03, SHOT-03 | 4 | Complete |
-| 5 | Parallel Execution | Concurrent captures with retry logic | SHOT-02, SHOT-04 | 4-6 | Pending |
+| 5 | Parallel Execution | Concurrent captures with retry logic | SHOT-02, SHOT-04 | 2 | Planned |
 | 6 | File Output | Organized folder structure and file naming | DEV-02, OUT-01 | 3-5 | Pending |
 | 7 | HTML Report | Grid view report with thumbnails and metadata | OUT-02, OUT-03, OUT-04, OUT-05 | 5-7 | Pending |
 | 8 | CLI Interface | Command parsing with flags and validation | CLI-01, CLI-02, CLI-03, CLI-04, LOAD-05, DEV-03 | 5-7 | Pending |
@@ -125,6 +125,13 @@
 **Goal:** Concurrent screenshot captures with retry logic
 
 **Requirements:** SHOT-02, SHOT-04
+
+**Status:** Planned
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Executor implementation (types, retry logic, captureAllDevices)
+- [ ] 05-02-PLAN.md — Executor unit tests (error classification, retry behavior, concurrency)
 
 **Success Criteria:**
 1. Multiple devices capture simultaneously (default 10 concurrent)
