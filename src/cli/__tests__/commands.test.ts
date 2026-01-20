@@ -147,8 +147,8 @@ describe('CLI Command Parsing', () => {
   });
 
   describe('help and version', () => {
-    it('has responsive-capture as program name', () => {
-      expect(program.name()).toBe('responsive-capture');
+    it('has screenie as program name', () => {
+      expect(program.name()).toBe('screenie');
     });
 
     it('has version set', () => {
