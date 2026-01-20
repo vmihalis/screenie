@@ -12,6 +12,7 @@ import { BrowserManager, captureAllDevices } from '../engine/index.js';
 import { createOutputDirectory, saveAllScreenshots } from '../output/index.js';
 import { generateReport, prepareScreenshotsForReport } from '../output/reporter.js';
 import { defaultConfig } from '../config/defaults.js';
+import { displayFailureSummary } from './errors.js';
 import type { ReportData } from '../output/types.js';
 
 /**
@@ -81,7 +82,14 @@ export async function runCapture(
       // Clear progress line
       process.stdout.write('\r' + ' '.repeat(60) + '\r');
 
-      console.log(pc.dim(`  ${result.successCount} succeeded, ${result.failureCount} failed`));
+      // Show capture result summary
+      if (result.failureCount === 0) {
+        console.log(pc.green(`  All ${result.successCount} captures succeeded`));
+      } else {
+        console.log(pc.dim(`  ${result.successCount} succeeded, ${result.failureCount} failed`));
+        // Display detailed failures with user-friendly messages
+        displayFailureSummary(result.results);
+      }
 
       // 6. Save screenshots
       const saveResult = await saveAllScreenshots(result.results, devices, outputDir);
