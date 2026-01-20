@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>screenie - Responsive Screenshots in One Command</title>
+  <meta name="description" content="Capture responsive design screenshots across 57 device viewports with one command. No setup required.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="screenie - Responsive Screenshots in One Command">
+  <meta property="og:description" content="Capture responsive design screenshots across 57 device viewports with one command. No setup required.">
+  <meta property="og:image" content="https://screenie.xyz/og-image.png">
+  <meta property="og:url" content="https://screenie.xyz">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="screenie - Responsive Screenshots in One Command">
+  <meta name="twitter:description" content="Capture responsive design screenshots across 57 device viewports with one command. No setup required.">
+  <meta name="twitter:image" content="https://screenie.xyz/og-image.png">
+
+  <!-- Performance hints -->
+  <link rel="preload" as="image" href="demo.gif">
+
+  <style>
+    /* Catppuccin Mocha colors - matches demo GIF */
+    :root {
+      --ctp-base: #1e1e2e;
+      --ctp-mantle: #181825;
+      --ctp-surface0: #313244;
+      --ctp-surface1: #45475a;
+      --ctp-text: #cdd6f4;
+      --ctp-subtext1: #bac2de;
+      --ctp-subtext0: #a6adc8;
+      --ctp-blue: #89b4fa;
+      --ctp-mauve: #cba6f7;
+    }
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      background: var(--ctp-base);
+      color: var(--ctp-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Hero section */
+    .hero {
+      max-width: 900px;
+      text-align: center;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      margin-bottom: 0.5rem;
+      color: var(--ctp-mauve);
+      font-weight: 700;
+    }
+
+    .tagline {
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--ctp-subtext0);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    /* Demo GIF - NO lazy loading (above fold) */
+    .demo {
+      width: 100%;
+      max-width: 850px;
+      border-radius: 8px;
+      margin: 0 auto 2rem;
+      display: block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Install command box */
+    .install {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .install code {
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+      background: var(--ctp-surface0);
+      color: var(--ctp-text);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      user-select: all;
+    }
+
+    .copy-btn {
+      background: var(--ctp-blue);
+      color: var(--ctp-base);
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+
+    .copy-btn:hover {
+      opacity: 0.9;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Links navigation */
+    .links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .links a {
+      color: var(--ctp-blue);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+      color: var(--ctp-subtext1);
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 640px) {
+      .install {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .install code {
+        width: 100%;
+        text-align: center;
+      }
+
+      .copy-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <h1>screenie</h1>
+    <p class="tagline">Capture responsive design screenshots across 57 device viewports with one command.</p>
+    <img src="demo.gif" alt="screenie capturing responsive screenshots" class="demo" width="850" height="450">
+    <div class="install">
+      <code id="cmd">npx screenie https://your-site.com</code>
+      <button class="copy-btn" onclick="copyInstall()">Copy</button>
+    </div>
+    <nav class="links">
+      <a href="https://github.com/memehalis/screenie">GitHub</a>
+      <a href="https://www.npmjs.com/package/screenie">npm</a>
+    </nav>
+  </main>
+
+  <script>
+    async function copyInstall() {
+      const cmd = document.getElementById('cmd').textContent;
+      try {
+        await navigator.clipboard.writeText(cmd);
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      } catch (err) {
+        console.error('Copy failed:', err);
+        // Fallback for older browsers
+        alert('Copy failed. Command: ' + cmd);
+      }
+    }
+  </script>
+</body>
+</html>
