@@ -54,10 +54,10 @@ Plans:
   1. Demo GIF shows full workflow: command input, progress output, report opening
   2. GIF is under 5MB for fast loading on landing page and README
   3. Demo captures real website, not placeholder
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 12-01: TBD
+- [ ] 12-01-PLAN.md — Create VHS tape script and generate optimized demo GIF
 
 ### Phase 13: README Polish
 **Goal**: README communicates value and enables instant onboarding
@@ -123,7 +123,7 @@ Phases execute in numeric order: 11 -> 12 -> 13 -> 14 -> 15 -> 16
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 11. npm Package Prep | 2/2 | ✓ Complete | 2026-01-20 |
-| 12. Demo Creation | 0/? | Not started | - |
+| 12. Demo Creation | 0/1 | Planned | - |
 | 13. README Polish | 0/? | Not started | - |
 | 14. Landing Page | 0/? | Not started | - |
 | 15. Documentation | 0/? | Not started | - |
@@ -132,4 +132,4 @@ Phases execute in numeric order: 11 -> 12 -> 13 -> 14 -> 15 -> 16
 ---
 
 *Created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 11 completion*
+*Last updated: 2026-01-20 after Phase 12 planning*
