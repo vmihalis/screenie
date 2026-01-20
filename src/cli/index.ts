@@ -1,14 +1,18 @@
-#!/usr/bin/env node
 // CLI entry point for responsive-capture
-// Placeholder - will be expanded in later phases
+// Note: shebang added via tsup banner config
 
-import { program } from 'commander';
+import { program } from './commands.js';
+import { runCapture, handleError } from './actions.js';
+import type { CLIOptions } from './types.js';
 
-program
-  .name('responsive-capture')
-  .description('CLI tool for capturing responsive design screenshots')
-  .version('1.0.0');
+// Connect action handler to program
+program.action(async (url: string, path: string | undefined, options: CLIOptions) => {
+  try {
+    await runCapture(url, path, options);
+  } catch (error) {
+    handleError(error);
+  }
+});
 
+// Parse arguments and run
 program.parse();
-
-console.log('responsive-capture CLI');
