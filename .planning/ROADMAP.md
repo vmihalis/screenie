@@ -18,7 +18,7 @@
 | 7 | HTML Report | Grid view report with thumbnails and metadata | OUT-02, OUT-03, OUT-04, OUT-05 | 2 | Complete |
 | 8 | CLI Interface | Command parsing with flags and validation | CLI-01, CLI-02, CLI-03, CLI-04, LOAD-05, DEV-03 | 3 | Complete |
 | 9 | UX Polish | Progress indicators, cookie hiding, error messages | UX-01, UX-02, UX-03 | 3 | Complete |
-| 10 | Integration | Wire everything, auto-open report, end-to-end testing | OUT-06 | 4-6 | Pending |
+| 10 | Integration | Wire everything, auto-open report, end-to-end testing | OUT-06 | 2 | Pending |
 
 ---
 
@@ -268,6 +268,13 @@
 **Goal:** Wire everything together, auto-open report, final polish
 
 **Requirements:** OUT-06
+
+**Status:** Pending
+**Plans:** 2 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Auto-open report feature with --no-open flag
+- [ ] 10-02-PLAN.md — End-to-end tests with subprocess invocation
 
 **Success Criteria:**
 1. Full pipeline works: CLI -> devices -> capture -> output -> report
