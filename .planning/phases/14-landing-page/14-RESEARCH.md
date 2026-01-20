@@ -1,165 +1,207 @@
 # Phase 14: Landing Page - Research
 
 **Researched:** 2026-01-20
-**Domain:** Static landing page with vanilla HTML/CSS, Netlify deployment
+**Domain:** Vanilla HTML/CSS landing page with Netlify deployment
 **Confidence:** HIGH
 
 ## Summary
 
-This phase creates a simple, fast-loading landing page for screenie.xyz that converts visitors to users within 10 seconds. The approach uses vanilla HTML/CSS (no framework) to achieve maximum performance, targeting Lighthouse score 95+.
+This phase creates a high-performance landing page for screenie.xyz using vanilla HTML/CSS (per prior decision). The page must load under 1 second, achieve Lighthouse performance > 95, and convert visitors within 10 seconds through a clear hero section with demo GIF, copy-to-clipboard install command, and links to resources.
 
-The existing demo GIF (51KB) is already well-optimized. The landing page needs: hero section with tagline, demo visualization, one-click install command copy, and links to GitHub/npm/docs. Deployment via Netlify with custom domain configuration.
+The stack is intentionally minimal: a single `index.html` file with inline CSS, using system fonts and the Catppuccin Mocha theme for visual consistency with the demo. No JavaScript framework needed - only a small clipboard script. Netlify deployment is straightforward for static HTML with the `netlify.toml` configuration file.
 
-**Primary recommendation:** Build a single-file HTML page with inline critical CSS, system fonts, copy-to-clipboard via Clipboard API, and deploy through Netlify with proper DNS configuration for screenie.xyz.
+The demo GIF already exists (`demo/demo.gif`, 52KB, 850x450) from Phase 12, using the Catppuccin Mocha theme. This will be embedded above the fold without lazy loading to ensure immediate visibility.
+
+**Primary recommendation:** Create a single `index.html` with inline critical CSS, system fonts, Catppuccin Mocha colors, centered hero layout, and deploy via Netlify with proper caching headers. Target total page weight under 100KB.
 
 ## Standard Stack
 
-The established libraries/tools for this domain:
+The established approach for this domain:
 
 ### Core
 | Technology | Version | Purpose | Why Standard |
 |------------|---------|---------|--------------|
-| Vanilla HTML5 | - | Page structure | Zero build, fastest load, no dependencies |
-| Vanilla CSS3 | - | Styling | Inline critical CSS, no render-blocking |
-| Clipboard API | Native | Copy functionality | Modern browsers (Chrome 66+, Firefox 63+, Safari 13.1+) |
-| Netlify | - | Hosting | Free tier, auto-SSL, CDN, custom domains |
+| Vanilla HTML5 | - | Page structure | Zero JS overhead, maximum performance, universal compatibility |
+| Vanilla CSS3 | - | Styling | No framework bloat, full control, instant rendering |
+| System fonts | - | Typography | Zero font loading time, native look, sub-millisecond render |
+| Netlify | - | Hosting/CDN | Free tier, global CDN, automatic HTTPS, easy custom domains |
 
 ### Supporting
-| Tool | Purpose | When to Use |
-|------|---------|-------------|
-| FFmpeg | GIF to MP4/WebM conversion | If demo needs video format optimization |
-| gifsicle | GIF compression | Already used - demo at 51KB is excellent |
+| Technology | Purpose | When to Use |
+|------------|---------|-------------|
+| `navigator.clipboard.writeText()` | Copy install command | Modern clipboard API - no library needed |
+| Open Graph meta tags | Social sharing previews | Required for professional link sharing |
+| Catppuccin Mocha | Color palette | Visual consistency with demo GIF |
 
 ### Alternatives Considered
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| Vanilla HTML/CSS | React/Next.js | Framework adds bundle size, build complexity for single page |
-| System fonts | Google Fonts | Network request, FOUT/FOIT, slower LCP |
-| MP4/WebM video | GIF | Video is 80-90% smaller, but 51KB GIF is already optimal |
+| Vanilla CSS | Pico.css (3.7KB) | Slightly more styling features, but adds dependency |
+| System fonts | Inter/custom font | Better typography but +100-300KB and FOIT/FOUT issues |
+| Inline CSS | External CSS file | Reduces HTML size but adds extra HTTP request |
+| Netlify | GitHub Pages | Less features (no headers file, no redirects) |
 
-**Installation:**
-```bash
-# No npm packages needed for landing page
-# Netlify CLI (optional, for local testing)
-npm install -g netlify-cli
-```
+**No installation required** - this is pure HTML/CSS.
 
 ## Architecture Patterns
 
 ### Recommended Project Structure
 ```
-site/
-  index.html          # Single-page landing (includes inline CSS)
-  demo.gif            # Copy from demo/ folder (or convert to video)
-  og-image.png        # Open Graph social preview image (1200x630)
-  favicon.ico         # Browser tab icon
-netlify.toml          # Deployment configuration (in repo root)
+/home/memehalis/responsiveness-mcp/
+  landing/                    # Landing page directory (publish folder)
+    index.html               # Single page with inline CSS
+    demo.gif                 # Copy from demo/demo.gif
+    og-image.png             # Open Graph image (1200x630)
+  netlify.toml               # Netlify configuration (project root)
+  demo/
+    demo.gif                 # Source demo (already exists)
 ```
 
-### Pattern 1: Single-File Landing Page
-**What:** All HTML and CSS in one file with no external dependencies
-**When to use:** Simple marketing/landing pages where performance is critical
-**Why:** Eliminates render-blocking requests, enables instant first paint
-
+### Pattern 1: Centered Hero Layout
+**What:** Single-column centered layout as used by 90%+ of developer tool landing pages
+**When to use:** CLI tools, developer-focused products, simple value propositions
+**Example:**
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>screenie - Responsive Screenshots in One Command</title>
-
-  <!-- Critical CSS inlined -->
-  <style>
-    /* All styles here - no external stylesheet */
-  </style>
-</head>
-<body>
-  <!-- Content -->
-</body>
-</html>
+<!-- Source: Evil Martians dev tool landing page study -->
+<main>
+  <section class="hero">
+    <h1>screenie</h1>
+    <p class="tagline">Capture responsive design screenshots across 57 device viewports with one command.</p>
+    <img src="demo.gif" alt="screenie CLI demo" class="demo">
+    <div class="install">
+      <code>npx screenie https://your-site.com</code>
+      <button onclick="copyInstall()">Copy</button>
+    </div>
+    <nav class="links">
+      <a href="https://github.com/memehalis/screenie">GitHub</a>
+      <a href="https://www.npmjs.com/package/screenie">npm</a>
+      <a href="#docs">Docs</a>
+    </nav>
+  </section>
+</main>
 ```
 
 ### Pattern 2: System Font Stack
-**What:** Use operating system fonts instead of web fonts
-**When to use:** When performance matters more than custom typography
+**What:** CSS font stack using native system fonts
+**When to use:** Any project prioritizing performance over custom typography
 **Example:**
 ```css
-/* Source: https://systemfontstack.com/ */
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+/* Source: GitHub, MVP.css, modern system font stacks */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono",
+    "Liberation Mono", Menlo, Monaco, Consolas, monospace;
 }
 
-/* Monospace for code blocks */
+body {
+  font-family: var(--font-family);
+}
+
 code, pre {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
-               Consolas, "Liberation Mono", monospace;
+  font-family: var(--font-mono);
 }
 ```
 
-### Pattern 3: Clipboard API for Copy Button
-**What:** Modern async clipboard API with visual feedback
-**When to use:** Copy-to-clipboard functionality
+### Pattern 3: Catppuccin Mocha Color Variables
+**What:** CSS custom properties with the Mocha palette
+**When to use:** Matching the demo GIF theme, dark mode landing page
 **Example:**
-```javascript
-// Source: https://web.dev/patterns/clipboard/copy-text
-async function copyInstallCommand() {
-  const command = 'npx screenie https://your-site.com';
-  const button = document.getElementById('copy-btn');
+```css
+/* Source: https://catppuccin.com/palette/ */
+:root {
+  /* Backgrounds */
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
 
+  /* Surfaces */
+  --ctp-surface0: #313244;
+  --ctp-surface1: #45475a;
+  --ctp-surface2: #585b70;
+
+  /* Text */
+  --ctp-text: #cdd6f4;
+  --ctp-subtext1: #bac2de;
+  --ctp-subtext0: #a6adc8;
+
+  /* Accents */
+  --ctp-blue: #89b4fa;
+  --ctp-green: #a6e3a1;
+  --ctp-mauve: #cba6f7;
+  --ctp-peach: #fab387;
+  --ctp-pink: #f5c2e7;
+  --ctp-teal: #94e2d5;
+  --ctp-lavender: #b4befe;
+  --ctp-sapphire: #74c7ec;
+  --ctp-sky: #89dceb;
+  --ctp-yellow: #f9e2af;
+  --ctp-red: #f38ba8;
+  --ctp-maroon: #eba0ac;
+  --ctp-rosewater: #f5e0dc;
+  --ctp-flamingo: #f2cdcd;
+}
+```
+
+### Pattern 4: Copy-to-Clipboard Button
+**What:** Modern async clipboard API with visual feedback
+**When to use:** Install commands, code snippets
+**Example:**
+```html
+<!-- Source: MDN Clipboard API docs -->
+<script>
+async function copyInstall() {
+  const command = 'npx screenie https://your-site.com';
   try {
     await navigator.clipboard.writeText(command);
-    button.textContent = 'Copied!';
-    setTimeout(() => button.textContent = 'Copy', 2000);
+    // Visual feedback
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
   } catch (err) {
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea');
-    textArea.value = command;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    button.textContent = 'Copied!';
-    setTimeout(() => button.textContent = 'Copy', 2000);
+    console.error('Failed to copy:', err);
   }
 }
+</script>
 ```
 
-### Pattern 4: Dark Mode Support
-**What:** Respect user's system color scheme preference
-**When to use:** Modern landing pages for developer tools
+### Pattern 5: Performance-First Meta Tags
+**What:** Complete head section for performance and SEO
+**When to use:** Every landing page
 **Example:**
-```css
-/* Source: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme */
-:root {
-  --bg: #ffffff;
-  --text: #1a1a2e;
-  --accent: #6366f1;
-  --code-bg: #f3f4f6;
-}
+```html
+<!-- Source: web.dev, Open Graph protocol -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>screenie - Responsive Screenshot Tool</title>
+  <meta name="description" content="Capture responsive design screenshots across 57 device viewports with one command.">
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1a2e;
-    --text: #f9fafb;
-    --accent: #818cf8;
-    --code-bg: #1e293b;
-  }
-}
+  <!-- Open Graph -->
+  <meta property="og:title" content="screenie - Responsive Screenshot Tool">
+  <meta property="og:description" content="Capture responsive design screenshots across 57 device viewports with one command.">
+  <meta property="og:image" content="https://screenie.xyz/og-image.png">
+  <meta property="og:url" content="https://screenie.xyz">
+  <meta property="og:type" content="website">
 
-body {
-  background: var(--bg);
-  color: var(--text);
-}
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="screenie - Responsive Screenshot Tool">
+  <meta name="twitter:description" content="Capture responsive design screenshots across 57 device viewports with one command.">
+  <meta name="twitter:image" content="https://screenie.xyz/og-image.png">
+
+  <!-- Performance hints -->
+  <link rel="preload" as="image" href="demo.gif">
+</head>
 ```
 
 ### Anti-Patterns to Avoid
-- **External CSS file for single page:** Adds render-blocking request
-- **Google Fonts:** Network request delays LCP, causes FOUT
-- **Heavy JavaScript frameworks:** React/Vue add 30-100KB+ for a static page
-- **Large uncompressed images:** Demo GIF at 51KB is already good
-- **Third-party analytics on landing:** Defer or avoid for performance
+- **Lazy loading above-fold images:** The demo GIF is the hero - DO NOT use `loading="lazy"` on it; this hurts LCP
+- **External fonts:** Google Fonts or similar adds 100-500ms to initial render
+- **CSS frameworks:** Tailwind, Bootstrap etc. add 50KB+ for a single page
+- **JavaScript frameworks:** React/Vue/etc. are massive overkill for a static landing page
+- **Multiple HTTP requests:** Inline critical CSS, minimize external resources
+- **Generic CTAs:** "Get Started" is weak; use "Copy command" or "Install now"
 
 ## Don't Hand-Roll
 
@@ -167,137 +209,226 @@ Problems that look simple but have existing solutions:
 
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|-------------|-----|
-| Copy to clipboard | Custom DOM manipulation | `navigator.clipboard.writeText()` | Standard API, async, handles permissions |
-| GIF animation | Custom video player | `<img>` for GIF or `<video autoplay loop muted>` | Native browser handling |
-| Responsive layout | Custom JS resize handlers | CSS Grid/Flexbox + media queries | Pure CSS, no JS needed |
-| Dark mode | Custom toggle storage | `prefers-color-scheme` media query | Respects system preference automatically |
-| SSL certificates | Manual cert management | Netlify auto-SSL | Free Let's Encrypt, auto-renewal |
+| Clipboard functionality | execCommand (deprecated) | navigator.clipboard.writeText() | Modern, async, cross-browser |
+| CSS reset | Custom reset | Browser defaults or minimal normalize | Modern browsers are consistent enough |
+| Responsive layout | Custom media queries | CSS clamp() for fluid sizing | Single line handles all breakpoints |
+| Dark theme | Custom color calculations | Catppuccin palette (pre-designed) | Harmonious, tested color relationships |
+| Hosting configuration | Custom server | Netlify static hosting | CDN, HTTPS, headers all handled |
 
-**Key insight:** For a single landing page, every dependency adds complexity. Native browser APIs and CSS handle everything needed.
+**Key insight:** A vanilla HTML/CSS landing page doesn't need libraries. The browser provides everything: CSS Grid, Flexbox, CSS variables, clipboard API, native form validation.
 
 ## Common Pitfalls
 
-### Pitfall 1: Render-Blocking Resources
-**What goes wrong:** External CSS/JS files delay first paint
-**Why it happens:** Browser must download and parse before rendering
-**How to avoid:** Inline all critical CSS in `<style>` tag, defer non-critical JS
-**Warning signs:** Lighthouse flags "Eliminate render-blocking resources"
+### Pitfall 1: Lazy Loading Hero Image
+**What goes wrong:** Demo GIF loads with delay, hurting LCP score
+**Why it happens:** Applying lazy loading globally to all images
+**How to avoid:** Never use `loading="lazy"` on above-fold content; preload hero image
+**Warning signs:** Lighthouse LCP score drops, demo visibly pops in
 
-### Pitfall 2: Large Images Above the Fold
-**What goes wrong:** LCP (Largest Contentful Paint) fails, slow perceived load
-**Why it happens:** Demo GIF/video is the largest element and blocks rendering
-**How to avoid:**
-- Keep GIF under 100KB (current 51KB is excellent)
-- Add explicit `width` and `height` attributes to prevent layout shift
-- Consider `loading="eager"` for above-fold images
-**Warning signs:** LCP > 2.5s, CLS > 0.1
+### Pitfall 2: External Font Loading
+**What goes wrong:** FOIT/FOUT flashes, 200-500ms render delay
+**Why it happens:** Using Google Fonts or self-hosted fonts
+**How to avoid:** Use system font stack exclusively
+**Warning signs:** Text invisible then appears (FOIT) or changes style (FOUT)
 
-### Pitfall 3: Missing Meta Tags
-**What goes wrong:** Poor social sharing appearance, SEO issues
-**Why it happens:** Forgetting Open Graph and Twitter Card tags
-**How to avoid:** Include all essential meta tags (see Code Examples)
-**Warning signs:** Blank previews when sharing on Twitter/LinkedIn
+### Pitfall 3: Non-HTTPS Assets
+**What goes wrong:** Mixed content warnings, broken images
+**Why it happens:** Using http:// URLs for assets
+**How to avoid:** All URLs use https:// or relative paths
+**Warning signs:** Browser security warnings, broken images on production
 
-### Pitfall 4: Clipboard API HTTPS Requirement
-**What goes wrong:** Copy button fails silently
-**Why it happens:** Clipboard API requires secure context (HTTPS)
-**How to avoid:** Netlify provides free HTTPS; test on deployed site, not `file://`
-**Warning signs:** Copy works locally with `localhost` but fails on `file://`
+### Pitfall 4: Missing Open Graph Image
+**What goes wrong:** Ugly or default preview when page shared on social media
+**Why it happens:** Forgetting to create og:image or wrong dimensions
+**How to avoid:** Create 1200x630 PNG, test with Open Graph debuggers
+**Warning signs:** Plain text previews on Twitter/LinkedIn/Slack
 
 ### Pitfall 5: DNS Propagation Delays
-**What goes wrong:** Custom domain doesn't resolve after configuration
-**Why it happens:** DNS changes take 24-48 hours to propagate globally
-**How to avoid:** Configure DNS early, use `dig` command to verify propagation
-**Warning signs:** "DNS_PROBE_FINISHED_NXDOMAIN" errors
+**What goes wrong:** Custom domain doesn't work immediately
+**Why it happens:** DNS changes take up to 48 hours to propagate
+**How to avoid:** Set up DNS early, verify with `dig` command
+**Warning signs:** Domain works intermittently or not at all
 
-### Pitfall 6: Missing Favicon
-**What goes wrong:** 404 errors in console, unprofessional appearance
-**Why it happens:** Browsers request favicon.ico automatically
-**How to avoid:** Create simple favicon, add `<link rel="icon">` tag
-**Warning signs:** Console shows 404 for /favicon.ico
+### Pitfall 6: Missing Cache Headers
+**What goes wrong:** Repeat visitors still download static assets
+**Why it happens:** Not configuring Netlify headers for immutable assets
+**How to avoid:** Add `_headers` file with Cache-Control directives
+**Warning signs:** Lighthouse flags caching issues
+
+### Pitfall 7: GIF Too Large for Mobile
+**What goes wrong:** Page exceeds data budget on mobile, slow LCP
+**Why it happens:** GIF is larger than expected
+**How to avoid:** Current demo.gif is 52KB - already optimized. If larger, convert to video/WebP
+**Warning signs:** LCP > 2.5s on mobile, total page size > 500KB
 
 ## Code Examples
 
-Verified patterns from official sources:
+Verified patterns for this phase:
 
-### Complete HTML Head Section
+### Complete index.html Structure
 ```html
-<!-- Source: https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>screenie - Responsive Screenshot Tool</title>
+  <meta name="description" content="Capture responsive design screenshots across 57 device viewports with one command.">
 
-  <!-- Primary Meta Tags -->
-  <title>screenie - Responsive Screenshots in One Command</title>
-  <meta name="title" content="screenie - Responsive Screenshots in One Command">
-  <meta name="description" content="Capture responsive design screenshots across 57 device viewports with one command. No setup required.">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://screenie.xyz/">
-  <meta property="og:title" content="screenie - Responsive Screenshots in One Command">
+  <!-- Open Graph -->
+  <meta property="og:title" content="screenie">
   <meta property="og:description" content="Capture responsive design screenshots across 57 device viewports with one command.">
   <meta property="og:image" content="https://screenie.xyz/og-image.png">
+  <meta property="og:url" content="https://screenie.xyz">
+  <meta property="og:type" content="website">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://screenie.xyz/">
-  <meta name="twitter:title" content="screenie - Responsive Screenshots in One Command">
-  <meta name="twitter:description" content="Capture responsive design screenshots across 57 device viewports with one command.">
-  <meta name="twitter:image" content="https://screenie.xyz/og-image.png">
+  <!-- Performance -->
+  <link rel="preload" as="image" href="demo.gif">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <style>
+    /* Catppuccin Mocha colors */
+    :root {
+      --ctp-base: #1e1e2e;
+      --ctp-surface0: #313244;
+      --ctp-text: #cdd6f4;
+      --ctp-subtext0: #a6adc8;
+      --ctp-blue: #89b4fa;
+      --ctp-green: #a6e3a1;
+      --ctp-mauve: #cba6f7;
+    }
+
+    /* Reset & base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--ctp-base);
+      color: var(--ctp-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Hero section */
+    .hero {
+      max-width: 900px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      margin-bottom: 0.5rem;
+      color: var(--ctp-mauve);
+    }
+
+    .tagline {
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--ctp-subtext0);
+      margin-bottom: 2rem;
+    }
+
+    /* Demo GIF */
+    .demo {
+      width: 100%;
+      max-width: 850px;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    /* Install command */
+    .install {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .install code {
+      font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+      background: var(--ctp-surface0);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .install button {
+      background: var(--ctp-blue);
+      color: var(--ctp-base);
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .install button:hover { opacity: 0.9; }
+
+    /* Links */
+    .links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      color: var(--ctp-blue);
+      text-decoration: none;
+    }
+
+    .links a:hover { text-decoration: underline; }
+  </style>
 </head>
-```
-
-### Hero Section Structure
-```html
-<!-- Source: Semantic HTML best practices -->
-<main>
-  <section class="hero">
+<body>
+  <main class="hero">
     <h1>screenie</h1>
-    <p class="tagline">Capture responsive design screenshots across 57 device viewports with one command</p>
-
-    <div class="install-box">
-      <code id="install-cmd">npx screenie https://your-site.com</code>
-      <button id="copy-btn" onclick="copyInstallCommand()">Copy</button>
+    <p class="tagline">Capture responsive design screenshots across 57 device viewports with one command.</p>
+    <img src="demo.gif" alt="screenie capturing responsive screenshots" class="demo">
+    <div class="install">
+      <code id="cmd">npx screenie https://your-site.com</code>
+      <button onclick="copyInstall()">Copy</button>
     </div>
-
-    <img src="demo.gif" alt="screenie CLI capturing responsive screenshots"
-         width="850" height="480" loading="eager">
-
     <nav class="links">
       <a href="https://github.com/memehalis/screenie">GitHub</a>
       <a href="https://www.npmjs.com/package/screenie">npm</a>
     </nav>
-  </section>
-</main>
+  </main>
+
+  <script>
+    async function copyInstall() {
+      const cmd = document.getElementById('cmd').textContent;
+      try {
+        await navigator.clipboard.writeText(cmd);
+        const btn = event.target;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      } catch (err) {
+        console.error('Copy failed:', err);
+      }
+    }
+  </script>
+</body>
+</html>
 ```
 
 ### netlify.toml Configuration
 ```toml
-# Source: https://docs.netlify.com/build/configure-builds/file-based-configuration/
+# Source: Netlify docs
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
 [build]
-  publish = "site/"
-  command = "echo 'Static site - no build needed'"
+  publish = "landing"
 
-# Redirect www to apex domain
-[[redirects]]
-  from = "https://www.screenie.xyz/*"
-  to = "https://screenie.xyz/:splat"
-  status = 301
-  force = true
-
-# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Cache static assets
 [[headers]]
   for = "/*.gif"
   [headers.values]
@@ -307,107 +438,130 @@ Verified patterns from official sources:
   for = "/*.png"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirect www to apex domain
+[[redirects]]
+  from = "https://www.screenie.xyz/*"
+  to = "https://screenie.xyz/:splat"
+  status = 301
+  force = true
 ```
 
-### Minimal CSS Reset + Base Styles
-```css
-/* Source: Modern CSS best practices 2026 */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.6;
-  min-height: 100vh;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
+### Alternative: _headers File
 ```
+# Place in landing/ directory
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+```
+
+## Netlify Deployment Steps
+
+### Option A: Netlify DNS (Recommended)
+1. Connect GitHub repo to Netlify
+2. Set publish directory to `landing`
+3. Go to Domain Management > Add custom domain > `screenie.xyz`
+4. Select "Set up Netlify DNS"
+5. Update domain registrar nameservers to Netlify's:
+   - `dns1.p0X.nsone.net` (specific servers shown in Netlify UI)
+6. Wait for DNS propagation (usually 1-24 hours)
+
+### Option B: External DNS
+1. Connect GitHub repo to Netlify
+2. Set publish directory to `landing`
+3. Go to Domain Management > Add custom domain > `screenie.xyz`
+4. At your DNS provider, add:
+   - A record: `screenie.xyz` -> `75.2.60.5`
+   - CNAME record: `www.screenie.xyz` -> `your-site.netlify.app`
+5. Wait for DNS propagation
 
 ## State of the Art
 
 | Old Approach | Current Approach | When Changed | Impact |
 |--------------|------------------|--------------|--------|
-| `document.execCommand('copy')` | `navigator.clipboard.writeText()` | 2018-2019 | Async, better UX, permission-aware |
-| Google Fonts everywhere | System font stack | 2020+ | Faster LCP, no FOUT |
-| Frameworks for everything | Vanilla for simple pages | 2022+ | Better Core Web Vitals |
-| GIF for all animations | Video (MP4/WebM) | 2018+ | 80-90% smaller files (but 51KB GIF is fine) |
-| Manual dark mode toggle | `prefers-color-scheme` | 2019+ | Automatic system preference |
-| Manual SSL certificates | Netlify auto-SSL | 2015+ | Free, automatic renewal |
+| jQuery clipboard plugins | navigator.clipboard API | 2018 | Native, no dependencies |
+| Google Fonts | System font stacks | 2020+ | 200-500ms faster initial render |
+| CSS frameworks | Vanilla CSS with variables | 2022+ | 50-100KB savings |
+| document.execCommand('copy') | navigator.clipboard.writeText() | 2020 | Async, more reliable |
+| FTP deployment | Git-based Netlify deploy | 2017+ | Automatic, CI/CD built-in |
 
 **Deprecated/outdated:**
-- `document.execCommand('copy')`: Still works as fallback but deprecated
-- Flash-based clipboard: Long dead (2020)
-- HTTP without SSL: Penalized by browsers, required for Clipboard API
+- `document.execCommand('copy')`: Still works but deprecated; use Clipboard API
+- Flash of Invisible Text (FOIT): Avoided entirely with system fonts
+- jQuery: Never needed for simple landing pages
 
 ## Open Questions
 
 Things that couldn't be fully resolved:
 
-1. **OG Image Design**
-   - What we know: 1200x630 recommended, PNG format
-   - What's unclear: Exact design/content for screenie's OG image
-   - Recommendation: Create simple branded image with logo and tagline
+1. **Open Graph image creation**
+   - What we know: Need 1200x630 PNG for social previews
+   - What's unclear: Best tool/approach to create it
+   - Recommendation: Screenshot the landing page at 1200x630 or create simple graphic with logo/tagline
 
-2. **Favicon Design**
-   - What we know: .ico format, multiple sizes (16x16, 32x32)
-   - What's unclear: Whether to use simple text "S" or custom icon
-   - Recommendation: Simple design, can be text-based
+2. **Exact Netlify nameservers**
+   - What we know: Netlify DNS uses nsone.net nameservers
+   - What's unclear: Specific nameservers assigned (shown after setup)
+   - Recommendation: Follow Netlify UI prompts during setup
 
-3. **Domain DNS Configuration**
-   - What we know: Need A record pointing to 75.2.60.5 for apex domain
-   - What's unclear: Current domain registrar for screenie.xyz
-   - Recommendation: Document both Netlify DNS and external DNS approaches
+3. **Domain registration status**
+   - What we know: screenie.xyz is the target domain
+   - What's unclear: Whether domain is already registered
+   - Recommendation: Verify domain ownership before deployment
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- [Netlify Custom Domains Documentation](https://docs.netlify.com/domains-https/custom-domains/) - DNS configuration, deployment
-- [MDN Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write) - Copy functionality
-- [MDN prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) - Dark mode
-- [web.dev Copy Text Pattern](https://web.dev/patterns/clipboard/copy-text) - Clipboard implementation
-- [Chrome Lighthouse Performance](https://developer.chrome.com/docs/lighthouse/performance/efficient-animated-content/) - GIF to video guidance
+- [Netlify Configuration Docs](https://docs.netlify.com/configure-builds/file-based-configuration/) - netlify.toml reference
+- [MDN Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API) - writeText() method
+- [Catppuccin Palette](https://catppuccin.com/palette/) - Official Mocha hex codes
+- [Open Graph Protocol](https://ogp.me/) - Required meta tags
 
 ### Secondary (MEDIUM confidence)
-- [System Font Stack](https://systemfontstack.com/) - Modern font stack recommendations
-- [Twitter Cards Documentation](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started) - Social meta tags
-- [Netlify File-Based Configuration](https://docs.netlify.com/build/configure-builds/file-based-configuration/) - netlify.toml syntax
+- [Chrome Lighthouse Docs](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring) - Scoring methodology
+- [web.dev Performance](https://web.dev/articles/lazy-loading-video) - Above-fold best practices
+- [Evil Martians Dev Tool Study](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025) - Hero section patterns
+- [Netlify Custom Domains](https://docs.netlify.com/manage/domains/configure-domains/configure-external-dns/) - DNS setup
 
 ### Tertiary (LOW confidence)
-- Various landing page examples from WebSearch - Design patterns only
+- WebSearch results for Lighthouse optimization - general guidance verified with official docs
+- WebSearch results for landing page design trends - design opinions, not technical facts
 
 ## Metadata
 
 **Confidence breakdown:**
-- Standard stack: HIGH - Vanilla HTML/CSS is well-documented, Netlify docs are authoritative
-- Architecture: HIGH - Single-file pattern is standard for performance-critical landing pages
-- Pitfalls: HIGH - Based on Lighthouse documentation and Netlify official guides
-- Code examples: HIGH - From MDN, web.dev, and official Netlify docs
+- Standard stack: HIGH - Vanilla HTML/CSS is well-understood, Netlify extensively documented
+- Architecture: HIGH - Patterns verified with official sources and Phase 12 research
+- Pitfalls: HIGH - Based on Lighthouse documentation and web.dev best practices
+- Deployment: MEDIUM - Exact steps depend on domain registrar and Netlify UI changes
 
 **Research date:** 2026-01-20
-**Valid until:** 2026-03-20 (60 days - stable technologies)
+**Valid until:** 2026-07-20 (stable technologies, low churn)
+
+---
+
+## Quick Reference
+
+**Target metrics:**
+- Page load: < 1 second
+- Lighthouse Performance: > 95
+- Total page weight: < 100KB
+- LCP: < 1.5 seconds
+
+**Files to create:**
+1. `landing/index.html` - Main page with inline CSS
+2. `landing/demo.gif` - Copy from demo/demo.gif (52KB)
+3. `landing/og-image.png` - Social preview image (1200x630)
+4. `netlify.toml` - Build and headers configuration
+
+**Demo GIF status:**
+- Location: `/home/memehalis/responsiveness-mcp/demo/demo.gif`
+- Size: 52KB (well under 5MB limit)
+- Dimensions: 850x450
+- Theme: Catppuccin Mocha
