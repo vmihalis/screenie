@@ -1,6 +1,7 @@
 import type { CaptureOptions, ScreenshotResult } from './types.js';
 import { DEFAULT_TIMEOUT } from './types.js';
 import { BrowserManager } from './browser.js';
+import { scrollForLazyContent } from './scroll.js';
 
 /**
  * Capture a full-page screenshot of a URL using a specific device configuration.
@@ -16,17 +17,26 @@ import { BrowserManager } from './browser.js';
  * - SHOT-01: Full-page screenshot (captures entire scrollable content)
  * - LOAD-01: Network idle wait before capture
  * - LOAD-02: Post-networkidle buffer wait for rendering stability
- * - LOAD-04: 30s timeout (split: 70% navigation, 15% buffer+scroll, 15% screenshot)
+ * - LOAD-03: Scroll for lazy-loaded content before screenshot
+ * - LOAD-04: 30s timeout (split: 60% navigation, 25% scroll+buffer, 15% screenshot)
  * - SHOT-03: CSS animations disabled for consistent screenshots
  */
 export async function captureScreenshot(
   manager: BrowserManager,
   options: CaptureOptions
 ): Promise<ScreenshotResult> {
-  const { url, device, timeout = DEFAULT_TIMEOUT, waitBuffer = 500 } = options;
+  const {
+    url,
+    device,
+    timeout = DEFAULT_TIMEOUT,
+    waitBuffer = 500,
+    scrollForLazy = true,
+    maxScrollIterations = 10,
+  } = options;
 
-  // Split timeout budget: 70% navigation, 15% buffer+scroll, 15% screenshot
-  const navigationTimeout = Math.floor(timeout * 0.7);
+  // Split timeout budget: 60% navigation, 25% scroll+buffer, 15% screenshot
+  const navigationTimeout = Math.floor(timeout * 0.6);
+  const scrollTimeout = Math.floor(timeout * 0.25);
   const screenshotTimeout = Math.floor(timeout * 0.15);
 
   const context = await manager.createContext(device);
@@ -42,6 +52,11 @@ export async function captureScreenshot(
 
     // LOAD-02: Wait buffer after network idle for post-idle rendering
     await page.waitForTimeout(waitBuffer);
+
+    // LOAD-03: Scroll for lazy-loaded content
+    if (scrollForLazy) {
+      await scrollForLazyContent(page, maxScrollIterations, scrollTimeout);
+    }
 
     // SHOT-01 + SHOT-03: Full-page screenshot with animations disabled
     const buffer = await page.screenshot({
