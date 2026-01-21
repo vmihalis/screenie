@@ -29,7 +29,7 @@
 **Plans**: 1 plan
 
 Plans:
-- [ ] 17-01-PLAN.md — Implement fold line indicator (PNG dimension extraction, fold calculation, CSS styles, HTML rendering)
+- [x] 17-01-PLAN.md — Implement fold line indicator (PNG dimension extraction, fold calculation, CSS styles, HTML rendering)
 
 ### Phase 18: Interactive Preview Modal
 **Goal**: Users can test the live site at any device dimensions
@@ -57,10 +57,10 @@ Phases execute in numeric order: 17 → 18
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 17. Fold Line Indicator | 0/1 | Ready to execute | - |
+| 17. Fold Line Indicator | 1/1 | ✓ Complete | 2026-01-21 |
 | 18. Interactive Preview Modal | 0/TBD | Not started | - |
 
 ---
 
 *Created: 2026-01-20*
-*Last updated: 2026-01-21 for Phase 17 planning*
+*Last updated: 2026-01-21 for Phase 17 completion*

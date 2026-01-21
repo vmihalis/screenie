@@ -9,11 +9,11 @@ Requirements for Enhanced Report milestone. Each maps to roadmap phases.
 
 ### Fold Line Indicator
 
-- [ ] **FOLD-01**: Horizontal line overlay displayed at viewport height on each screenshot
-- [ ] **FOLD-02**: Fold line visible on thumbnails in grid view
-- [ ] **FOLD-03**: Fold line visible on enlarged view (lightbox)
-- [ ] **FOLD-04**: Fold line uses non-intrusive styling (dashed, semi-transparent)
-- [ ] **FOLD-05**: Fold line positioned via CSS (not baked into screenshot image)
+- [x] **FOLD-01**: Horizontal line overlay displayed at viewport height on each screenshot
+- [x] **FOLD-02**: Fold line visible on thumbnails in grid view
+- [x] **FOLD-03**: Fold line visible on enlarged view (lightbox)
+- [x] **FOLD-04**: Fold line uses non-intrusive styling (dashed, semi-transparent)
+- [x] **FOLD-05**: Fold line positioned via CSS (not baked into screenshot image)
 
 ### Interactive Preview Modal
 
@@ -67,11 +67,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOLD-01 | Phase 17 | Pending |
-| FOLD-02 | Phase 17 | Pending |
-| FOLD-03 | Phase 17 | Pending |
-| FOLD-04 | Phase 17 | Pending |
-| FOLD-05 | Phase 17 | Pending |
+| FOLD-01 | Phase 17 | Complete |
+| FOLD-02 | Phase 17 | Complete |
+| FOLD-03 | Phase 17 | Complete |
+| FOLD-04 | Phase 17 | Complete |
+| FOLD-05 | Phase 17 | Complete |
 | PREV-01 | Phase 18 | Pending |
 | PREV-02 | Phase 18 | Pending |
 | PREV-03 | Phase 18 | Pending |
@@ -87,4 +87,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 after initial definition*
+*Last updated: 2026-01-21 after Phase 17 completion*
