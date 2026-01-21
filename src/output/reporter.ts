@@ -327,7 +327,307 @@ body {
   pointer-events: none;
   z-index: 10;
 }
+
+/* Preview Modal styles */
+.preview-modal {
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 95vw;
+  max-height: 95vh;
+  background: white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.preview-modal::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.close-btn:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+.modal-body {
+  padding: 1rem;
+  position: relative;
+}
+
+.preview-iframe {
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0066cc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.error-icon {
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+
+.error-state h3 {
+  margin: 1rem 0 0.5rem;
+  color: #333;
+}
+
+.error-state p {
+  margin: 0 0 1.5rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fallback-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #0066cc;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.fallback-btn:hover {
+  background: #0052a3;
+}
+
+.fallback-btn:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* Preview button overlay */
+.thumbnail-card {
+  position: relative;
+}
+
+.preview-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 102, 204, 0.9);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+
+.thumbnail-card:hover .preview-btn {
+  opacity: 1;
+}
+
+.preview-btn:hover {
+  background: rgba(0, 82, 163, 0.95);
+}
+
+.preview-btn:focus-visible {
+  opacity: 1;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
 `;
+
+/**
+ * Generate the interactive preview modal template with dialog, iframe, and JavaScript.
+ * The modal allows users to view the captured site at device viewport dimensions.
+ * @param url - The URL of the captured site
+ * @returns Complete modal HTML including dialog, CSS, and JavaScript
+ */
+export function generateModalTemplate(url: string): string {
+  const escapedUrl = escapeHtml(url);
+  return `<dialog id="preview-modal" class="preview-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button id="close-modal" class="close-btn" autofocus aria-label="Close preview">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading preview...</p>
+      </div>
+
+      <!-- Iframe preview -->
+      <iframe
+        id="preview-iframe"
+        class="preview-iframe"
+        sandbox="allow-scripts allow-forms allow-same-origin"
+        title="Interactive preview of ${escapedUrl}"
+        hidden>
+      </iframe>
+
+      <!-- Error state -->
+      <div id="error-state" class="error-state" hidden>
+        <svg class="error-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke-width="2"/>
+          <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+          <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+        </svg>
+        <h3>Preview Unavailable</h3>
+        <p>This site cannot be displayed in a frame due to security restrictions (X-Frame-Options or Content-Security-Policy).</p>
+        <a id="fallback-link" href="${escapedUrl}" target="_blank" rel="noopener noreferrer" class="fallback-btn">
+          Open in New Tab
+        </a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function() {
+  var modal = document.getElementById('preview-modal');
+  var closeBtn = document.getElementById('close-modal');
+  var iframe = document.getElementById('preview-iframe');
+  var loadingState = document.getElementById('loading-state');
+  var errorState = document.getElementById('error-state');
+  var fallbackLink = document.getElementById('fallback-link');
+
+  var previouslyFocusedElement = null;
+  var IFRAME_TIMEOUT_MS = 10000;
+
+  function openPreview(url, width, height) {
+    previouslyFocusedElement = document.activeElement;
+
+    // Reset states
+    loadingState.hidden = false;
+    iframe.hidden = true;
+    errorState.hidden = true;
+
+    // Set iframe dimensions with viewport constraints
+    iframe.style.width = Math.min(width, window.innerWidth * 0.9) + 'px';
+    iframe.style.height = Math.min(height, window.innerHeight * 0.8) + 'px';
+    fallbackLink.href = url;
+
+    // Show modal
+    modal.showModal();
+
+    // Load iframe with timeout detection
+    loadIframeWithTimeout(iframe, url);
+  }
+
+  function loadIframeWithTimeout(iframe, url) {
+    var loaded = false;
+
+    var timeoutId = setTimeout(function() {
+      if (!loaded) {
+        showError();
+      }
+    }, IFRAME_TIMEOUT_MS);
+
+    iframe.addEventListener('load', function() {
+      clearTimeout(timeoutId);
+      loaded = true;
+      showIframe();
+    }, { once: true });
+
+    iframe.src = url;
+  }
+
+  function showIframe() {
+    loadingState.hidden = true;
+    iframe.hidden = false;
+    errorState.hidden = true;
+  }
+
+  function showError() {
+    loadingState.hidden = true;
+    iframe.hidden = true;
+    errorState.hidden = false;
+  }
+
+  function closeModal() {
+    modal.close();
+    iframe.src = 'about:blank'; // Stop loading
+    if (previouslyFocusedElement) {
+      previouslyFocusedElement.focus();
+    }
+  }
+
+  // Close button handler
+  closeBtn.addEventListener('click', closeModal);
+
+  // Backdrop click handler
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Close event handler (ESC key triggers this)
+  modal.addEventListener('close', function() {
+    iframe.src = 'about:blank';
+    if (previouslyFocusedElement) {
+      previouslyFocusedElement.focus();
+    }
+  });
+
+  // Expose to thumbnail click handlers
+  window.openPreview = openPreview;
+})();
+</script>`;
+}
 
 /**
  * Render the report header with metadata
@@ -434,6 +734,9 @@ function buildReportHtml(
   // Render all lightboxes
   const lightboxes = screenshots.map(renderLightbox).join('\n');
 
+  // Render preview modal
+  const modal = generateModalTemplate(data.url);
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -448,6 +751,7 @@ function buildReportHtml(
     ${categorySections.join('\n    ')}
   </main>
   ${lightboxes}
+  ${modal}
 </body>
 </html>`;
 }
