@@ -71,8 +71,9 @@ describe('CLI E2E', () => {
       const result = await invokeCli(['--version']);
 
       expect(result.exitCode).toBe(0);
-      // ASCII art banner contains distinctive ASCII patterns (figlet "Big" font)
-      expect(result.stdout).toContain('_____');
+      // Non-TTY output (subprocess) uses plain text fallback
+      // Should contain literal 'SCREENIE' text at start
+      expect(result.stdout).toMatch(/^SCREENIE\n/);
       // Should include version number
       expect(result.stdout).toMatch(/v\d+\.\d+\.\d+/);
       // Should include tagline
@@ -85,8 +86,8 @@ describe('CLI E2E', () => {
       const result = await invokeCli(['-v']);
 
       expect(result.exitCode).toBe(0);
-      // Should display same ASCII banner
-      expect(result.stdout).toContain('_____');
+      // Non-TTY output uses plain text format
+      expect(result.stdout).toMatch(/^SCREENIE\n/);
       expect(result.stdout).toMatch(/v\d+\.\d+\.\d+/);
     });
   });

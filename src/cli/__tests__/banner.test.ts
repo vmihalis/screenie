@@ -140,4 +140,137 @@ describe('ASCII Banner', () => {
       expect(typeof plain).toBe('string');
     });
   });
+
+  describe('terminal width handling', () => {
+    // Store original COLUMNS for env var tests
+    const originalEnvColumns = process.env.COLUMNS;
+
+    afterEach(() => {
+      // Restore COLUMNS env var
+      if (originalEnvColumns !== undefined) {
+        process.env.COLUMNS = originalEnvColumns;
+      } else {
+        delete process.env.COLUMNS;
+      }
+    });
+
+    it('uses Big font for wide terminals (>=80 columns)', () => {
+      Object.defineProperty(process.stdout, 'columns', {
+        value: 100,
+        writable: true,
+        configurable: true,
+      });
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Big font creates distinctive wide patterns with multiple underscores
+      expect(plain).toContain('_____');
+      expect(plain.match(/_____/g)?.length).toBeGreaterThan(3);
+    });
+
+    it('uses Small font for narrow terminals (60-79 columns)', () => {
+      Object.defineProperty(process.stdout, 'columns', {
+        value: 70,
+        writable: true,
+        configurable: true,
+      });
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Small font still produces ASCII art but with different patterns
+      // It should have ASCII art characters (not plain text)
+      expect(plain).toMatch(/[_|\/\\]/);
+      // Should have multiple lines indicating figlet output
+      expect(plain.split('\n').length).toBeGreaterThan(5);
+      // Should NOT be plain text format (which would be exactly 5 lines)
+      expect(plain).not.toMatch(/^SCREENIE\nv/);
+    });
+
+    it('uses Mini font for very narrow terminals (45-59 columns)', () => {
+      Object.defineProperty(process.stdout, 'columns', {
+        value: 50,
+        writable: true,
+        configurable: true,
+      });
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Mini font still produces some ASCII art
+      // Should have multiple lines indicating figlet output
+      expect(plain.split('\n').length).toBeGreaterThan(5);
+      // Should NOT be plain text format
+      expect(plain).not.toMatch(/^SCREENIE\nv/);
+    });
+
+    it('falls back to plain text for extremely narrow terminals (<45 columns)', () => {
+      Object.defineProperty(process.stdout, 'columns', {
+        value: 40,
+        writable: true,
+        configurable: true,
+      });
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Plain text fallback should contain literal 'SCREENIE' at start
+      expect(plain).toMatch(/^SCREENIE\n/);
+      // Should have exactly 5 lines: SCREENIE, version, tagline, help, empty
+      expect(plain.split('\n').length).toBe(5);
+      // Should NOT have figlet patterns
+      expect(plain).not.toContain('_____');
+    });
+
+    it('uses plain text for non-TTY output (pipes)', () => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: false,
+        writable: true,
+        configurable: true,
+      });
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Plain text fallback for non-TTY
+      expect(plain).toMatch(/^SCREENIE\n/);
+      expect(plain.split('\n').length).toBe(5);
+      expect(plain).not.toContain('_____');
+    });
+
+    it('respects COLUMNS env var as fallback', () => {
+      // Unset stdout.columns to force env var fallback
+      Object.defineProperty(process.stdout, 'columns', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      });
+      process.env.COLUMNS = '50';
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // With COLUMNS=50, should use Mini font (45-59 range)
+      // Should NOT be plain text (which starts with literal SCREENIE)
+      expect(plain.split('\n').length).toBeGreaterThan(5);
+    });
+
+    it('defaults to 80 columns when no width info available', () => {
+      // Unset both stdout.columns and COLUMNS env
+      Object.defineProperty(process.stdout, 'columns', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      });
+      delete process.env.COLUMNS;
+
+      const banner = generateBanner('1.0.0');
+      const plain = stripAnsi(banner);
+
+      // Default 80 columns should use Big font
+      expect(plain).toContain('_____');
+      expect(plain.match(/_____/g)?.length).toBeGreaterThan(3);
+    });
+  });
 });
