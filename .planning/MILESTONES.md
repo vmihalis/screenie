@@ -1,4 +1,38 @@
-# Project Milestones: Responsive Screenshot Tool
+# Project Milestones: Screenie
+
+## v2.0 Open Source Release (Shipped: 2026-01-21)
+
+**Delivered:** Professional open source release with npm publishing, landing page, VitePress documentation, and demo GIF for instant developer onboarding.
+
+**Phases completed:** 11-16 (9 plans total)
+
+**Key accomplishments:**
+
+- Published to npm with provenance signing (`screenie-tool`) - supply chain security via Sigstore attestation
+- Created landing page with demo GIF and copy-to-clipboard install command (Vercel)
+- Built VitePress documentation site with getting started guide and CLI reference (Vercel)
+- Recorded 52KB demo GIF with VHS showing full CLI workflow
+- Prepared npm package with files whitelist security and MIT license
+- Updated README with badges, demo GIF, quick start, and feature list
+
+**Stats:**
+
+- 62 files created/modified
+- +11,616 / -1,176 lines (mostly docs/landing/demo additions)
+- 6 phases, 9 plans
+- 53 commits
+- 1 day from milestone start to ship
+
+**Git range:** `8531a19` (docs: update v2.0 scope) → `9800b1f` (docs(audit): create v2.0 milestone audit)
+
+**Deliverables:**
+- npm: https://www.npmjs.com/package/screenie-tool
+- Landing: https://landing-gilt-psi-18.vercel.app
+- Docs: https://dist-xi-virid.vercel.app
+
+**What's next:** v2.1 enhancements (custom domains, config file support, expanded documentation)
+
+---
 
 ## v1.0 MVP (Shipped: 2026-01-20)
 
@@ -26,6 +60,6 @@
 
 **Git range:** `f1aff03` (docs: initialize project) → `6779a0f` (docs(10): complete integration phase)
 
-**What's next:** v1.1 enhancements (config file support, custom viewports, output directory flag)
+**What's next:** v2.0 Open Source Release
 
 ---
