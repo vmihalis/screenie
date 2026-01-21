@@ -43,6 +43,8 @@ export interface CaptureOptions {
   maxScrollIterations?: number;
   /** Hide common cookie consent banners before capture (default: true) */
   hideCookieBanners?: boolean;
+  /** Capture full scrollable page instead of viewport-only (default: false) */
+  fullPage?: boolean;
 }
 
 /**

@@ -20,6 +20,8 @@ export interface CLIOptions {
   output?: string;
   /** Suppress auto-open of report in browser (set by --no-open flag) */
   open?: boolean;
+  /** Capture full scrollable page instead of viewport-only */
+  fullPage?: boolean;
 }
 
 /**
