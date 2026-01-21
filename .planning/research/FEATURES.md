@@ -1,216 +1,242 @@
-# Features Research
+# Feature Landscape: Fold Indicators & Interactive Previews
 
-**Domain:** Open Source CLI Tool Release
-**Project:** Screenie (responsiveness-mcp) - Responsive Screenshot CLI
-**Researched:** 2026-01-20
-**Confidence:** HIGH (multiple authoritative sources)
+**Domain:** Responsive testing tools / Visual screenshot reporting
+**Researched:** 2026-01-21
+**Confidence:** MEDIUM (verified with multiple sources, patterns from existing tools)
 
----
+## Context
 
-## Landing Page Features
+Screenie already has:
+- 57 device presets with full-page screenshots
+- HTML report with base64-embedded images
+- CSS-only click-to-enlarge lightbox (`:target` pseudo-class)
+- Category grouping (phones/tablets/desktops)
+- Metadata display
 
-### Table Stakes
+This research focuses on v2.1 features:
+1. **Fold line indicator** - Visual overlay showing viewport height boundary
+2. **Interactive preview modal** - Click to interact with page in iframe at device dimensions
+
+## Table Stakes
+
+Features users expect from fold indicators and interactive previews. Missing these = incomplete feature.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Clear value proposition | Users need to understand "what is this" within 5 seconds | Low | One sentence: "Capture responsive screenshots from your terminal" |
-| Installation command | Copy-paste installation is expected for CLI tools | Low | `npm install -g responsiveness-mcp` front and center |
-| Quick demo/example | Shows tool in action, builds confidence | Medium | Terminal recording (GIF/asciinema) showing basic usage |
-| Feature list | Users scan for capability matches | Low | Bullet points with icons |
-| GitHub link | Open source credibility signal | Low | Prominent button/badge |
-| License visibility | OSS users need to know terms | Low | MIT badge |
+| **Fold Line Visualization** | | | |
+| Horizontal line at viewport height | Standard pattern for "above the fold" indication | Low | CSS overlay, positioned at device.height px |
+| Visible but non-intrusive styling | Must be clear without dominating screenshot | Low | Common: dashed/dotted line, semi-transparent |
+| Device-specific positioning | Each device has different viewport height | Low | Already have device.height in metadata |
+| Label or indicator explaining what line represents | Users unfamiliar with "fold" concept need context | Low | Tooltip or inline label like "Viewport fold (375px)" |
+| **Interactive Preview Modal** | | | |
+| Click screenshot to open interactive view | Standard pattern in BrowserStack, Responsively App | Medium | Replace/augment existing lightbox |
+| Iframe loads target URL at device dimensions | Core value proposition - test interactions | Medium | iframe with width/height from device preset |
+| Device frame/bezel (optional) | Professional polish, seen in frameme, WithFrame, Shareshot | Low-Med | CSS border/box-shadow OR actual device PNG frame |
+| Close button (X or ESC key) | Expected modal UX | Low | Already have in existing lightbox |
+| Device metadata display | Show which device/dimensions being previewed | Low | Already have in existing lightbox |
+| **Performance & UX** | | | |
+| Fast modal open (no loading delay) | Smooth UX, iframe loads async | Low | iframe lazy loading, modal appears immediately |
+| Scrollable iframe content | Full-page screenshots need scrolling in fixed viewport | Low | iframe CSS: overflow scrolling |
+| Responsive modal sizing | Modal must work on different screen sizes | Medium | Max-width/height constraints, mobile-friendly |
+| Visual indication that preview is interactive | Users need to know they can click/scroll in iframe | Low | Cursor change, hover state, or inline hint |
 
-### Differentiators
+## Differentiators
+
+Features that set Screenie apart. Not expected, but add significant value.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Live demo | Try before install builds massive trust | High | Consider embedding a web playground or CodeSandbox |
-| Comparison table | Shows advantage over alternatives (Playwright raw, shot-scraper, etc.) | Medium | Honest comparison highlighting unique multi-viewport feature |
-| Output gallery | Visual proof of quality screenshots | Low | Grid of sample outputs at different viewports |
-| Integration logos | Shows ecosystem compatibility (CI/CD, GitHub Actions) | Low | Badges for Node, GitHub Actions, etc. |
-| Testimonials/stars | Social proof from real users | Medium | Requires adoption first; add GitHub star count badge |
-| Performance stats | "Generate 5 screenshots in 3 seconds" type claims | Low | Only if verifiable |
+| **Advanced Fold Visualization** | | | |
+| Toggle fold lines on/off | Clean view vs analytical view | Low | Checkbox/button to hide/show all fold overlays |
+| Multiple fold lines (mobile vs desktop heights) | Show common viewport breakpoints | Medium | e.g., 667px (iPhone 8), 1080px (Full HD) |
+| Fold line with "above/below" shading | Visual emphasis of critical viewport area | Low | Semi-transparent overlay above line |
+| Animated scroll preview | Auto-scroll showing content above/below fold | High | Low priority, complex to implement smoothly |
+| **Enhanced Interactive Preview** | | | |
+| Side-by-side comparison mode | Open multiple device previews simultaneously | Medium | Seen in Responsively App's "mirrored interactions" |
+| Synced interactions across devices | Click/scroll in one iframe mirrors to others | High | Complex but powerful for comparison |
+| Real device user agent | Iframe uses device-specific UA string | Low | More accurate for responsive behavior testing |
+| Touch event simulation | Mobile device preview handles touch gestures | Medium | May need library like Hammer.js |
+| Network throttling toggle | Test slow connections in preview | High | Complex, requires service worker or external tool |
+| Responsive inspector overlay | Show element dimensions/breakpoints in preview | High | Similar to browser DevTools, significant scope |
+| **Workflow Enhancements** | | | |
+| Keyboard shortcuts | Arrow keys to navigate between devices | Medium | Good UX, requires keyboard event handling |
+| Direct URL sharing to specific device | Share link that opens specific device preview | Low | URL hash like `#preview-iphone-16-pro` |
+| Screenshot from within preview | Capture updated state after interaction | Medium | Useful for documenting bugs found |
+| Compare mode | Show fold indicator on original vs live preview | Low-Med | Split screen or toggle view |
+| **Polish & Professional Use** | | | |
+| Device bezels/frames library | Realistic device mockups for presentations | Medium | Maintain PNG assets, handle scaling |
+| Export preview as standalone HTML | Share interactive preview without Screenie | Medium | Template iframe as self-contained file |
+| Annotation layer | Draw/comment on fold indicators or previews | High | Complex feature, consider deferring |
 
-### Anti-Features
+## Anti-Features
+
+Features to explicitly NOT build. Common mistakes in this domain.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| Auto-playing video with sound | Annoying, unprofessional | Use muted GIFs or opt-in video |
-| Newsletter popup | Interrupts evaluation | Add newsletter option in footer only |
-| Feature overload | Overwhelms users, dilutes message | Focus on 3-5 key features prominently |
-| Marketing fluff | Developers distrust vague claims | Use concrete examples and numbers |
-| Pricing/enterprise section | Confuses OSS positioning | Keep purely OSS, no commercial tier messaging |
-| Animation overload | Slow loading, distracting | Subtle animations only |
+| Server-side iframe rendering | Complexity, security risks, costs | Client-side iframe loading, user's browser does work |
+| Cross-origin iframe bypassing | Security violation, breaks web standards | Accept CORS limitations, document clearly |
+| Full browser engine embedding | Massive bundle size, maintenance burden | Use standard iframe, leverage browser's engine |
+| Real-time collaborative annotation | Scope creep, requires backend infrastructure | Keep tool local/static, no backend |
+| Visual regression diff overlays | Different product category (Percy/Applitools) | Focus on manual review workflow, not automated diffing |
+| Multi-browser support (Firefox/Safari) | Playwright already captures in Chromium, adding browsers multiplies cost | Document Chromium-only, sufficient for layout verification |
+| Video recording of interactions | File size explosion, complex processing | Static screenshots + interactive preview is enough |
+| Built-in network throttling | Complex to implement reliably, DevTools has this | Users can throttle in browser DevTools if needed |
+| Touch gesture recording/playback | Complex state management, niche use case | Interactive preview allows manual interaction |
+| Authentication/login flow automation | Outside scope, users can provide authenticated URLs | Document "capture after login" workflow |
 
----
+## Feature Dependencies
 
-## Documentation Features
+```
+Fold Line Indicator (Independent)
+  ↓
+  Toggle fold lines on/off (Enhancement)
+  ↓
+  Multiple fold lines (Enhancement)
 
-### Table Stakes
+Interactive Preview Modal (Core)
+  ↓
+  Device frame/bezel (Polish)
+  ↓
+  Side-by-side comparison (Advanced)
+  ↓
+  Synced interactions (Complex)
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Installation guide | Every user's first step | Low | Multiple methods: npm global, npx, local install |
-| Quick start example | 30-second path to first success | Low | Single command that produces output |
-| CLI reference | All commands and flags documented | Medium | `--help` output formatted nicely |
-| Configuration options | Users need to customize behavior | Medium | Environment variables, config file format |
-| Error troubleshooting | Common issues and solutions | Medium | "Playwright not found", permissions, etc. |
-| Changelog | Track what changed between versions | Low | Keep-a-changelog format |
+Existing Lightbox (v2.0)
+  ↓
+  Replace with Tabbed View (New Modal)
+    - Tab 1: Static screenshot (existing)
+    - Tab 2: Interactive preview (new)
+```
 
-### Differentiators
+## MVP Recommendation (v2.1)
 
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Recipes/cookbook | Real-world usage patterns | Medium | "Screenshot your Storybook", "CI/CD integration" |
-| Architecture docs | Helps contributors understand codebase | Medium | Shows professional maintenance |
-| Video tutorials | Accessibility for visual learners | High | Short (<3 min) focused tutorials |
-| Versioned docs | Different docs per major version | High | Overkill for v1, plan for v2+ |
-| Search functionality | Large doc sites need search | Medium | Algolia DocSearch (free for OSS) |
-| Dark mode | Developer preference | Low | Essential if building custom site |
+For v2.1 milestone, prioritize these table stakes features:
 
-### Anti-Features
+### Phase 1: Fold Line Indicator
+1. Horizontal line overlay at viewport height
+2. Non-intrusive dashed styling (e.g., 2px dashed red with 50% opacity)
+3. Device-specific positioning using existing device.height
+4. Simple label or data attribute with viewport height
 
-| Anti-Feature | Why Avoid | What to Do Instead |
-|--------------|-----------|-------------------|
-| Outdated examples | Breaks trust when code doesn't work | Test examples in CI, use actual tool output |
-| Missing CLI reference | Forces users to `--help` guess | Generate from source or maintain manually |
-| Walls of text | Developers skim, don't read | Use code blocks, tables, bullet points |
-| Undocumented flags | Frustrates power users | Document everything, mark experimental flags |
-| No error documentation | Users get stuck | Add troubleshooting section |
-| Scattered information | Can't find what you need | Clear navigation, table of contents |
+**Implementation notes:**
+- Add CSS class `.fold-indicator` to each thumbnail/lightbox image
+- Position using `::after` pseudo-element or overlay div
+- No JavaScript required, pure CSS solution
 
----
+### Phase 2: Interactive Preview Modal
+1. Click thumbnail opens modal with two views: static screenshot + interactive iframe
+2. Iframe loads target URL with device width/height constraints
+3. Device metadata display (name, dimensions)
+4. Close button + ESC key handler
+5. Responsive modal sizing
 
-## npm Package Features
+**Implementation notes:**
+- Enhance existing lightbox with tabbed interface or side-by-side layout
+- iframe sandbox attributes for security
+- CSS: `iframe { width: [device.width]px; height: [device.height]px; }`
+- Handle CORS limitations gracefully (show error message)
 
-### Table Stakes
+### Phase 3: Polish (Optional for v2.1)
+1. Toggle fold lines on/off (checkbox in report header)
+2. Keyboard shortcuts (arrow keys to navigate devices)
+3. Loading state for iframe (spinner while page loads)
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Semantic versioning | Industry standard, enables dependency management | Low | Already at 1.0.0 |
-| Accurate `description` | npm search discoverability | Low | Current: "CLI tool for capturing responsive design screenshots" - good |
-| Relevant `keywords` | npm search ranking | Low | Current has 6 keywords - add more: "viewport", "multi-device", "capture" |
-| `repository` field | Links npm to GitHub | Low | **Currently missing** - add GitHub URL |
-| `bugs` field | Direct path to report issues | Low | **Currently missing** - add issues URL |
-| `homepage` field | Links to docs/landing page | Low | **Currently missing** - add URL |
-| `license` field | Legal clarity | Low | Already "MIT" |
-| `engines` field | Node version requirements | Low | Already ">=20" |
-| Clean `files` array | Only ship what's needed | Low | Use `files` field to whitelist dist/ |
+**Defer to v2.2+:**
+- Device bezels/frames (requires asset library)
+- Side-by-side comparison mode (complex state management)
+- Synced interactions (very complex, niche use case)
+- Touch event simulation (mobile-specific, lower priority)
 
-### Differentiators
+## User Expectations
 
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| TypeScript declarations | DX for TS users if used as library | Medium | Ship `.d.ts` files |
-| `exports` field | Modern ESM support | Low | Define entry points explicitly |
-| Minimal dependencies | Faster install, smaller attack surface | Low | Current deps are reasonable |
-| Pre-publish checks | Prevents broken releases | Low | `prepublishOnly` script |
-| npm provenance | Supply chain security badge | Low | `npm publish --provenance` |
-| `funding` field | Sustainability signal | Low | GitHub Sponsors, Open Collective |
+Based on research into similar tools (BrowserStack, Responsively App, Chrome DevTools):
 
-### Anti-Features
+### Fold Indicator Expectations
+- **Visual clarity:** Line should be immediately obvious but not distracting
+- **Accuracy:** Line positioned exactly at viewport.height (not approximate)
+- **Context:** Label or tooltip explaining what line represents
+- **Consistency:** Same styling across all device categories
 
-| Anti-Feature | Why Avoid | What to Do Instead |
-|--------------|-----------|-------------------|
-| Publishing tests | Bloats package size | Use `files` field to exclude |
-| Publishing source maps | Usually unnecessary for CLI | Exclude unless debugging needed |
-| Missing `bin` field | CLI won't be executable | Already have this |
-| Overly broad keywords | Spam signal, poor discovery | Keep keywords focused and relevant |
-| No `prepublishOnly` script | Risk publishing broken code | Add build + test before publish |
-| Secrets in published package | Security vulnerability | Use `.npmignore` or `files` whitelist |
+Common viewport heights users expect to see marked:
+- **Phones:** 667px (iPhone 8), 740px (iPhone 12), 844px (iPhone 14 Pro)
+- **Tablets:** 1024px (iPad), 1366px (iPad Pro)
+- **Desktops:** 1080px (Full HD), 1440px (QHD), 2160px (4K)
 
----
+### Interactive Preview Expectations
+- **Immediate response:** Modal opens without delay
+- **Functional interactions:** Links, buttons, forms work in iframe
+- **Scroll behavior:** Viewport-constrained scrolling (not full-page scroll)
+- **Close mechanisms:** Both X button and ESC key work
+- **Error handling:** Clear message if iframe fails (CORS, CSP, network)
+- **Visual context:** Device dimensions displayed prominently
 
-## README Features
+Users from BrowserStack/Chrome DevTools will expect:
+- Ability to test responsive behavior at exact device dimensions
+- Real page interaction (not just static screenshot)
+- Quick switching between devices
 
-### Table Stakes
+## Research Limitations & Gaps
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Project name + one-liner | Immediate understanding | Low | "responsiveness-mcp: Responsive screenshots from the CLI" |
-| Badges row | Version, license, build status, npm downloads | Low | 4-7 badges max |
-| Installation section | `npm install` command | Low | Global and npx options |
-| Quick usage example | 5-10 lines showing basic use | Low | Include expected output |
-| Feature list | Scannable capabilities | Low | Bullet points with brief descriptions |
-| License section | Legal notice | Low | "MIT License" with link |
-| API/CLI reference | All options documented | Medium | Or link to full docs |
+**LOW confidence areas:**
+- Device bezel/frame asset availability - didn't verify free/open-source libraries
+- Touch event simulation libraries - mentioned but not deeply evaluated
+- Iframe sandbox security best practices for this use case
 
-### Differentiators
+**Unresolved questions:**
+- Should fold indicator appear on thumbnails, lightbox, or both?
+- Should interactive preview replace lightbox or augment it (tabs)?
+- How to handle pages that prevent iframe embedding (X-Frame-Options)?
+- Should fold line be customizable (color, style, position)?
 
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Demo GIF/video | Visual proof of functionality | Medium | Terminal recording showing command -> output |
-| Table of contents | Navigation for long READMEs | Low | Auto-generate with tools |
-| Comparison section | Why choose this over alternatives | Medium | Honest comparison table |
-| Use cases section | Helps users see if it fits their needs | Low | "Perfect for: design QA, documentation, portfolio shots" |
-| Contributing section | Encourages community | Low | Link to CONTRIBUTING.md |
-| Acknowledgments | Credits to dependencies/inspirations | Low | Shows good community citizenship |
-| Roadmap | Shows project is active/planned | Low | Link to GitHub Projects or brief list |
+**Recommended follow-up research:**
+- Survey 5-10 users on fold indicator visibility preferences
+- Test iframe CORS behavior with common web frameworks (Next.js, WordPress)
+- Evaluate device frame libraries (frameme, device_frame Flutter) for web port
 
----
+## Implementation Complexity Assessment
 
-## Supporting Files
+| Feature | Effort | Risk | Notes |
+|---------|--------|------|-------|
+| Fold line CSS overlay | 1-2 hours | Low | Pure CSS, already have device.height |
+| Toggle fold lines | 1 hour | Low | Simple JavaScript toggle class |
+| Interactive iframe modal | 4-6 hours | Medium | Security considerations, CORS handling |
+| Device frame/bezel | 8-12 hours | Medium | Asset sourcing, scaling logic, performance |
+| Side-by-side comparison | 12-16 hours | High | Complex state management, layout challenges |
+| Synced interactions | 20-30 hours | High | Event proxying, performance bottlenecks |
 
-### Table Stakes
-
-| File | Purpose | Notes |
-|------|---------|-------|
-| `LICENSE` | Legal terms | MIT full text file |
-| `CHANGELOG.md` | Version history | Keep-a-changelog format |
-| `.gitignore` | Clean repo | Standard Node ignores |
-| `.npmignore` or `files` | Clean package | Prefer `files` in package.json |
-
-### Differentiators
-
-| File | Purpose | Notes |
-|------|---------|-------|
-| `CONTRIBUTING.md` | Contributor guidelines | Setup, testing, PR process |
-| `CODE_OF_CONDUCT.md` | Community standards | Contributor Covenant recommended |
-| `SECURITY.md` | Vulnerability reporting | GitHub recognizes this |
-| `.github/ISSUE_TEMPLATE/` | Structured bug reports | Bug report, feature request templates |
-| `.github/PULL_REQUEST_TEMPLATE.md` | PR guidelines | Checklist for contributors |
-| `.github/FUNDING.yml` | Sponsorship links | GitHub Sponsors integration |
-
----
-
-## Priority Recommendations
-
-### Must Have for Credibility (Do First)
-
-1. **package.json metadata**: Add `repository`, `bugs`, `homepage` fields
-2. **README badges**: npm version, license, build status, downloads
-3. **Demo GIF**: Terminal recording of basic usage
-4. **CHANGELOG.md**: Document existing versions
-5. **LICENSE file**: Full MIT text
-
-### Should Have for Professional Polish
-
-1. **CONTRIBUTING.md**: How to contribute
-2. **GitHub issue templates**: Bug report, feature request
-3. **Quick start in README**: 3-step path to first screenshot
-4. **CLI reference**: All flags documented
-
-### Nice to Have for Excellence
-
-1. **Landing page**: Simple single-page site
-2. **Comparison table**: vs shot-scraper, vs raw Playwright
-3. **Recipes section**: CI/CD, Storybook, common patterns
-4. **CODE_OF_CONDUCT.md**: Community guidelines
-
----
+**v2.1 MVP recommendation: Fold line (Phase 1) + Interactive preview (Phase 2) = 5-8 hours**
 
 ## Sources
 
-### HIGH Confidence (Authoritative)
-- [Command Line Interface Guidelines](https://clig.dev/) - Comprehensive CLI design best practices
-- [npm package.json documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/) - Official npm metadata reference
-- [Make a README](https://www.makeareadme.com/) - README structure best practices
+This research synthesized findings from multiple sources across responsive testing tools, viewport indicators, and interactive preview patterns:
 
-### MEDIUM Confidence (Verified with multiple sources)
-- [Evil Martians Dev Tool Landing Page Research](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025) - Analysis of 100+ landing pages
-- [shot-scraper GitHub](https://github.com/simonw/shot-scraper) - Example of well-documented screenshot CLI
-- [GitHub README Template Guide](https://rivereditor.com/blogs/write-perfect-readme-github-repo) - README structure analysis
-- [Snyk npm package best practices](https://snyk.io/blog/best-practices-create-modern-npm-package/) - Security-focused package guidelines
+**Responsive Testing Tools & Patterns:**
+- [Above the Fold vs Below the Fold - AB Tasty](https://www.abtasty.com/blog/above-the-fold/)
+- [Chrome DevTools Device Mode](https://developer.chrome.com/docs/devtools/device-mode)
+- [BrowserStack Responsive Testing Guide](https://www.browserstack.com/guide/view-mobile-version-of-website-on-chrome)
+- [Responsively App Features](https://responsively.app/)
+- [Viewport Size Tester](https://dcpweb.co.uk/web-tools/viewport-size-tester)
 
-### LOW Confidence (Single source, verify)
-- [Lapa Ninja Open Source Examples](https://www.lapa.ninja/category/open-source/) - Landing page inspiration gallery
+**Visual Testing & Screenshot Tools:**
+- [BrowserStack Visual Testing Tools](https://www.browserstack.com/guide/visual-testing-tools)
+- [Screenshot Testing Guide](https://www.browserstack.com/guide/screenshot-testing)
+- [xScope Overlay Tools](https://xscopeapp.com/guide)
+- [Visual Testing in Cypress](https://docs.cypress.io/app/tooling/visual-testing)
+
+**Device Frames & UI Patterns:**
+- [frameme - Frame screenshots for any device](https://github.com/joshluongo/frameme)
+- [Chrome Toggle Device Bezel](https://ahmedrajawrites.medium.com/chrome-toggle-device-bezel-frames-c85df101e29b)
+- [Modal UI Patterns](https://ui-patterns.com/patterns/modal-windows/examples)
+
+**Interactive Preview & Viewport Testing:**
+- [Mobile Simulator Testing Tool](https://mavtools.com/tools/mobile-simulator-testing-tool-browser/)
+- [Viewport Resizer](https://lab.maltewassermann.com/viewport-resizer/)
+- [Puppeteer iframe Guide](https://www.webshare.io/academy-article/puppeteer-iframe)
+
+**Viewport Height Indicators:**
+- [CSS Viewport Units Guide](https://elementor.com/blog/vh/)
+- [Understanding Mobile Viewport Units](https://medium.com/@tharunbalaji110/understanding-mobile-viewport-units-a-complete-guide-to-svh-lvh-and-dvh-0c905d96e21a)
+- [Viewport Height Test](https://gist.github.com/LukeChannings/efdd456bccc3ee1459eacc663e9abc24)
+
+All sources accessed 2026-01-21. Cross-referenced patterns from established tools (BrowserStack, Chrome DevTools, Responsively App) to identify table stakes vs differentiators.
