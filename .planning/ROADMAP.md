@@ -30,10 +30,11 @@ Transform default capture behavior from full-page to viewport-only screenshots, 
 4. Screenshot dimensions match device viewport height (not page content height)
 5. All existing tests pass or are updated for new default behavior
 
-**Plans:** TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 21-01: TBD
+- [ ] 21-01-PLAN.md — Add types and CLI flag for fullPage option
+- [ ] 21-02-PLAN.md — Implement viewport-only default with fullPage support
 
 ---
 
@@ -104,7 +105,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 21. Capture Engine Changes | 0/? | Not started | - |
+| 21. Capture Engine Changes | 0/2 | Planned | - |
 | 22. Report Cleanup | 0/? | Not started | - |
 | 23. Documentation & Release | 0/? | Not started | - |
 
