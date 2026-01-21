@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 ## Current Position
 
 Phase: 21 of 23 (Capture Engine Changes)
-Plan: 01 of 03
+Plan: 02 of 03
 Status: In progress
-Last activity: 2026-01-21 — Completed 21-01-PLAN.md (Type definitions and CLI flag)
+Last activity: 2026-01-21 — Completed 21-02-PLAN.md (Viewport-only capture implementation)
 
-Progress: [█░░░░░░░░░] 33% (v3.0 Viewport-First Capture)
+Progress: [██░░░░░░░░] 67% (v3.0 Viewport-First Capture)
 
 ## Performance Metrics
 
 **v3.0 Velocity (in progress):**
-- Plans completed: 1
-- Total duration: 3min
+- Plans completed: 2
+- Total duration: 11min (3min + 8min)
 - Phases completed: 0 (21 in progress)
 
 **v2.2 Velocity:**
@@ -31,7 +31,7 @@ Progress: [█░░░░░░░░░] 33% (v3.0 Viewport-First Capture)
 **Cumulative:**
 - Milestones shipped: 4 (v1.0, v2.0, v2.1, v2.2)
 - Total phases completed: 20
-- Total plans completed: 43
+- Total plans completed: 44
 - Total days: 2
 
 ## Accumulated Context
@@ -44,6 +44,8 @@ v3.0 decisions (in progress):
 - fullPage defaults to false (viewport-only) - users opt-in to full-page capture
 - CLI flag named --full-page (kebab-case) for consistency with existing flags
 - Optional boolean pattern: flag presence = true, absence = undefined
+- Nullish coalescing pattern for fullPage option (options.fullPage ?? false)
+- Dynamic screenshot mode threaded through CLI → actions → executor → capturer
 
 v2.2 decisions marked as Good:
 - Figlet Big font for ASCII banner
@@ -73,10 +75,10 @@ From v2.2:
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Completed 21-01-PLAN.md
+Stopped at: Completed 21-02-PLAN.md
 Resume file: None
 
 ---
 
 *State initialized: 2026-01-21*
-*Last updated: 2026-01-21 after 21-01 plan execution*
+*Last updated: 2026-01-21 after 21-02 plan execution*
