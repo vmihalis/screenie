@@ -36,6 +36,26 @@ Then run anywhere:
 screenie https://your-site.com
 ```
 
+### Updating
+
+To update to the latest version:
+
+```bash
+npm update -g screenie-tool
+```
+
+Check your current version:
+
+```bash
+screenie --version
+```
+
+Check if updates are available:
+
+```bash
+npm outdated -g screenie-tool
+```
+
 ## Requirements
 
 - **Node.js 20 or higher** - Required for running the CLI
