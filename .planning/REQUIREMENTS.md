@@ -9,9 +9,9 @@ Requirements for viewport-first capture release. Breaking change from full-page 
 
 ### Capture Behavior
 
-- [ ] **CAP-01**: Default capture mode is viewport-only (device viewport height, not full page)
-- [ ] **CAP-02**: `--full-page` flag enables full-page capture (original v1.0-v2.2 behavior)
-- [ ] **CAP-03**: Existing flags work unchanged (--phones-only, --concurrency, --wait, etc.)
+- [x] **CAP-01**: Default capture mode is viewport-only (device viewport height, not full page)
+- [x] **CAP-02**: `--full-page` flag enables full-page capture (original v1.0-v2.2 behavior)
+- [x] **CAP-03**: Existing flags work unchanged (--phones-only, --concurrency, --wait, etc.)
 
 ### Report Changes
 
@@ -53,9 +53,9 @@ Deferred to v3.1+:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CAP-01 | Phase 21 | Pending |
-| CAP-02 | Phase 21 | Pending |
-| CAP-03 | Phase 21 | Pending |
+| CAP-01 | Phase 21 | Complete |
+| CAP-02 | Phase 21 | Complete |
+| CAP-03 | Phase 21 | Complete |
 | RPT-01 | Phase 22 | Pending |
 | RPT-02 | Phase 22 | Pending |
 | RPT-03 | Phase 22 | Pending |
@@ -73,4 +73,4 @@ Deferred to v3.1+:
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 after initial definition*
+*Last updated: 2026-01-21 after Phase 21 complete*
