@@ -67,16 +67,8 @@ export interface ScreenshotForReport {
   category: DeviceCategory;
   /** Viewport width */
   width: number;
-  /** Viewport height (the fold position) */
+  /** Viewport height */
   height: number;
   /** Base64 data URI (data:image/png;base64,...) */
   dataUri: string;
-  /** Actual screenshot width in pixels */
-  screenshotWidth: number;
-  /** Actual screenshot height in pixels (full-page height) */
-  screenshotHeight: number;
-  /** Fold position for lightbox (percentage of screenshot height) */
-  foldPositionLightbox: number;
-  /** Fold position for thumbnail (percentage of visible area, or null if not visible) */
-  foldPositionThumbnail: number | null;
 }
