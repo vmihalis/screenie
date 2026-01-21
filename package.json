@@ -4,7 +4,7 @@
   "description": "CLI tool for capturing responsive design screenshots using Playwright",
   "type": "module",
   "bin": {
-    "screenie": "./dist/cli.js"
+    "screenie": "dist/cli.js"
   },
   "files": [
     "dist"
