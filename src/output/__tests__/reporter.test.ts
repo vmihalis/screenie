@@ -12,6 +12,8 @@ import {
   prepareScreenshotsForReport,
   getPngDimensions,
   calculateFoldPositions,
+  generateModalTemplate,
+  renderThumbnailCard,
 } from '../reporter.js';
 import type { ScreenshotForReport, ReportData } from '../types.js';
 import type { DeviceCategory, Device } from '../../devices/types.js';
@@ -935,5 +937,223 @@ describe('generateReport', () => {
     expect(html).toContain('id="lb-phone-375x812"');
     expect(html).toContain('id="lb-tablet-768x1024"');
     expect(html).toContain('id="lb-desktop-1920x1080"');
+  });
+});
+
+// ============================================================================
+// Modal Template Tests
+// ============================================================================
+
+describe('generateModalTemplate', () => {
+  it('returns HTML with dialog element', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('<dialog');
+    expect(html).toContain('id="preview-modal"');
+  });
+
+  it('includes close button with accessibility attributes', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('aria-label="Close preview"');
+    expect(html).toContain('autofocus');
+  });
+
+  it('includes loading state with spinner', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('id="loading-state"');
+    expect(html).toContain('class="spinner"');
+    expect(html).toContain('Loading preview');
+  });
+
+  it('includes iframe with security sandbox', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('<iframe');
+    expect(html).toContain('id="preview-iframe"');
+    expect(html).toContain('sandbox="allow-scripts allow-forms allow-same-origin"');
+  });
+
+  it('includes error state with fallback link', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('id="error-state"');
+    expect(html).toContain('id="fallback-link"');
+    expect(html).toContain('Open in New Tab');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+
+  it('includes openPreview JavaScript function', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('window.openPreview = openPreview');
+    expect(html).toContain('function openPreview(url, width, height)');
+  });
+
+  it('includes iframe timeout detection', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('IFRAME_TIMEOUT_MS');
+    expect(html).toContain('setTimeout');
+  });
+
+  it('includes backdrop click handler', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('e.target === modal');
+  });
+
+  it('includes focus restoration on close', () => {
+    const html = generateModalTemplate('https://example.com');
+    expect(html).toContain('previouslyFocusedElement');
+    expect(html).toContain('.focus()');
+  });
+
+  it('escapes URL in fallback link', () => {
+    const html = generateModalTemplate('https://example.com?a=1&b=2');
+    expect(html).toContain('href="https://example.com?a=1&amp;b=2"');
+  });
+
+  it('escapes URL in iframe title', () => {
+    const html = generateModalTemplate('https://example.com?a=1&b=2');
+    expect(html).toContain('title="Interactive preview of https://example.com?a=1&amp;b=2"');
+  });
+});
+
+describe('renderThumbnailCard with preview', () => {
+  const mockScreenshotForPreview: ScreenshotForReport = {
+    deviceName: 'iPhone 14',
+    category: 'phones',
+    width: 390,
+    height: 844,
+    dataUri: 'data:image/png;base64,test',
+    screenshotWidth: 390,
+    screenshotHeight: 2000,
+    foldPositionLightbox: 42.2,
+    foldPositionThumbnail: 65.0,
+  };
+
+  it('includes preview button with onclick handler', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain('class="preview-btn"');
+    expect(html).toContain('onclick="openPreview(');
+  });
+
+  it('preview button has correct dimensions in onclick', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain("openPreview('https://example.com', 390, 844)");
+  });
+
+  it('preview button has accessibility label', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain('aria-label="Preview iPhone 14 at 390x844"');
+  });
+
+  it('escapes URL in onclick handler', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com?a=1&b=2');
+    expect(html).toContain('https://example.com?a=1&amp;b=2');
+  });
+
+  it('preserves lightbox anchor for screenshot viewing', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain('href="#lb-');
+    expect(html).toContain('class="thumbnail-link"');
+  });
+
+  it('escapes device name with special characters', () => {
+    const screenshotWithSpecialName: ScreenshotForReport = {
+      ...mockScreenshotForPreview,
+      deviceName: 'iPhone <script>alert(1)</script>',
+    };
+    const html = renderThumbnailCard(screenshotWithSpecialName, 'https://example.com');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).not.toContain('<script>alert');
+  });
+
+  it('includes preview button text', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain('>Preview</button>');
+  });
+
+  it('preview button is type="button"', () => {
+    const html = renderThumbnailCard(mockScreenshotForPreview, 'https://example.com');
+    expect(html).toContain('type="button"');
+  });
+});
+
+describe('buildReportHtml with modal', () => {
+  beforeEach(async () => {
+    await mkdir(TEST_OUTPUT_DIR, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(TEST_OUTPUT_DIR, { recursive: true, force: true });
+  });
+
+  it('includes modal dialog in generated HTML', async () => {
+    const data: ReportData = {
+      url: 'https://example.com',
+      capturedAt: '2026-01-21',
+      duration: 5000,
+      deviceCount: 1,
+      files: [],
+    };
+    const screenshots: ScreenshotForReport[] = [{
+      deviceName: 'Test Device',
+      category: 'phones',
+      width: 375,
+      height: 812,
+      dataUri: 'data:image/png;base64,test',
+      screenshotWidth: 375,
+      screenshotHeight: 1500,
+      foldPositionLightbox: 54.13,
+      foldPositionThumbnail: 84.3,
+    }];
+
+    await generateReport(data, screenshots, TEST_OUTPUT_DIR);
+    const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
+    expect(html).toContain('<dialog id="preview-modal"');
+    expect(html).toContain('window.openPreview');
+  });
+
+  it('includes preview button on thumbnail cards', async () => {
+    const data: ReportData = {
+      url: 'https://example.com',
+      capturedAt: '2026-01-21',
+      duration: 5000,
+      deviceCount: 1,
+      files: [],
+    };
+    const screenshots: ScreenshotForReport[] = [{
+      deviceName: 'Test Device',
+      category: 'phones',
+      width: 375,
+      height: 812,
+      dataUri: 'data:image/png;base64,test',
+      screenshotWidth: 375,
+      screenshotHeight: 1500,
+      foldPositionLightbox: 54.13,
+      foldPositionThumbnail: 84.3,
+    }];
+
+    await generateReport(data, screenshots, TEST_OUTPUT_DIR);
+    const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
+    expect(html).toContain('class="preview-btn"');
+    expect(html).toContain("openPreview('https://example.com', 375, 812)");
+  });
+
+  it('includes modal CSS styles', async () => {
+    await generateReport(mockReportData, [], TEST_OUTPUT_DIR);
+    const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
+    expect(html).toContain('.preview-modal');
+    expect(html).toContain('.preview-modal::backdrop');
+    expect(html).toContain('.loading-state');
+    expect(html).toContain('.spinner');
+    expect(html).toContain('@keyframes spin');
+    expect(html).toContain('.error-state');
+    expect(html).toContain('.fallback-btn');
+  });
+
+  it('includes preview button CSS styles', async () => {
+    await generateReport(mockReportData, [], TEST_OUTPUT_DIR);
+    const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
+    expect(html).toContain('.preview-btn');
+    expect(html).toContain('.thumbnail-card:hover .preview-btn');
+    expect(html).toContain('.preview-btn:hover');
+    expect(html).toContain('.preview-btn:focus-visible');
   });
 });
