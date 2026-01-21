@@ -5,13 +5,16 @@ hero:
   name: screenie
   text: Responsive Screenshot CLI
   tagline: Capture 57 device viewports with one command
+  image:
+    src: /demo.gif
+    alt: screenie demo showing CLI capturing screenshots
   actions:
     - theme: brand
       text: Get Started
       link: /getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/memehalis/screenie
+      link: https://github.com/vmihalis/screenie
 
 features:
   - icon: 📱

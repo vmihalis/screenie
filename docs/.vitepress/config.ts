@@ -29,7 +29,8 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vmihalis/responsiveness-mcp' }
+      { icon: 'github', link: 'https://github.com/vmihalis/screenie' },
+      { icon: 'npm', link: 'https://www.npmjs.com/package/screenie-tool' }
     ],
 
     search: {
