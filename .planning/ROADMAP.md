@@ -11,7 +11,7 @@ Transform default capture behavior from full-page to viewport-only screenshots, 
 ## Phases
 
 - [x] **Phase 21: Capture Engine Changes** - Change default capture to viewport-only, add --full-page flag
-- [ ] **Phase 22: Report Cleanup** - Remove fold line indicators from report
+- [x] **Phase 22: Report Cleanup** - Remove fold line indicators from report
 - [ ] **Phase 23: Documentation & Release** - Update docs, bump version to 3.0.0
 
 ## Phase Details
@@ -54,7 +54,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 22-01-PLAN.md — Remove fold line code from reporter, types, and tests
+- [x] 22-01-PLAN.md — Remove fold line code from reporter, types, and tests
 
 ---
 
@@ -87,9 +87,9 @@ Plans:
 | CAP-01 | 21 | Complete |
 | CAP-02 | 21 | Complete |
 | CAP-03 | 21 | Complete |
-| RPT-01 | 22 | Pending |
-| RPT-02 | 22 | Pending |
-| RPT-03 | 22 | Pending |
+| RPT-01 | 22 | Complete |
+| RPT-02 | 22 | Complete |
+| RPT-03 | 22 | Complete |
 | DOC-01 | 23 | Pending |
 | DOC-02 | 23 | Pending |
 | DOC-03 | 23 | Pending |
@@ -106,10 +106,10 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 21. Capture Engine Changes | 2/2 | Complete | 2026-01-21 |
-| 22. Report Cleanup | 0/1 | Planned | - |
+| 22. Report Cleanup | 1/1 | Complete | 2026-01-22 |
 | 23. Documentation & Release | 0/? | Not started | - |
 
 ---
 
 *Created: 2026-01-21*
-*Last updated: 2026-01-22 (Phase 22 planned)*
+*Last updated: 2026-01-22 (Phase 22 complete)*

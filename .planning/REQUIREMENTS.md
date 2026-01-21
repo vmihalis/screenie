@@ -15,9 +15,9 @@ Requirements for viewport-first capture release. Breaking change from full-page 
 
 ### Report Changes
 
-- [ ] **RPT-01**: Remove fold line indicator from thumbnail cards
-- [ ] **RPT-02**: Remove fold line indicator from lightbox view
-- [ ] **RPT-03**: Remove fold line CSS and related code
+- [x] **RPT-01**: Remove fold line indicator from thumbnail cards
+- [x] **RPT-02**: Remove fold line indicator from lightbox view
+- [x] **RPT-03**: Remove fold line CSS and related code
 
 ### Documentation
 
@@ -56,9 +56,9 @@ Deferred to v3.1+:
 | CAP-01 | Phase 21 | Complete |
 | CAP-02 | Phase 21 | Complete |
 | CAP-03 | Phase 21 | Complete |
-| RPT-01 | Phase 22 | Pending |
-| RPT-02 | Phase 22 | Pending |
-| RPT-03 | Phase 22 | Pending |
+| RPT-01 | Phase 22 | Complete |
+| RPT-02 | Phase 22 | Complete |
+| RPT-03 | Phase 22 | Complete |
 | DOC-01 | Phase 23 | Pending |
 | DOC-02 | Phase 23 | Pending |
 | DOC-03 | Phase 23 | Pending |
@@ -73,4 +73,4 @@ Deferred to v3.1+:
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 after Phase 21 complete*
+*Last updated: 2026-01-22 after Phase 22 complete*
