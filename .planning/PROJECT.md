@@ -8,6 +8,14 @@ An open source CLI tool that captures responsive screenshots across 57 device di
 
 Instantly verify that a web app looks correct across all device sizes without manual testing - run one command, review one report.
 
+## Current Milestone: v2.1 Enhanced Report
+
+**Goal:** Make the HTML report more useful by showing the viewport boundary and enabling interactive testing at any device size.
+
+**Target features:**
+- Fold line indicator — CSS overlay showing where viewport ends on each screenshot
+- Interactive preview — Click screenshot to open live iframe at device dimensions
+
 ## Current State
 
 **Version:** v2.0 (shipped 2026-01-21)
@@ -73,7 +81,9 @@ The tool is complete and published. All v1.0 and v2.0 requirements are validated
 
 ### Active
 
-(No active requirements - next milestone planning needed)
+**v2.1 Enhanced Report:**
+- Fold line indicator on screenshots (CSS overlay at viewport height)
+- Interactive preview modal with live iframe at device dimensions
 
 ### Future (v2.1+)
 
@@ -140,4 +150,4 @@ Tech stack: Node.js 20+, Playwright (Chromium), TypeScript, tsup, Vitest.
 | GitHub Actions for publish | Automated releases with provenance | Good |
 
 ---
-*Last updated: 2026-01-21 after v2.0 milestone*
+*Last updated: 2026-01-21 after starting v2.1 milestone*
