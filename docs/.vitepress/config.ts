@@ -29,7 +29,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/memehalis/screenie' }
+      { icon: 'github', link: 'https://github.com/vmihalis/responsiveness-mcp' }
     ],
 
     search: {

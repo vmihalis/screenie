@@ -14,8 +14,8 @@ Requirements for open source release. Each maps to roadmap phases.
 - [x] **NPM-03**: package.json includes files whitelist (prevents accidental secret exposure)
 - [x] **NPM-04**: MIT LICENSE file exists in repository root
 - [x] **NPM-05**: npm pack --dry-run succeeds without warnings
-- [ ] **NPM-06**: npm provenance signing configured for supply chain security
-- [ ] **NPM-07**: Package published to npm registry
+- [x] **NPM-06**: npm provenance signing configured for supply chain security
+- [x] **NPM-07**: Package published to npm registry
 
 ### Demo
 
@@ -89,8 +89,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NPM-03 | Phase 11 | Complete |
 | NPM-04 | Phase 11 | Complete |
 | NPM-05 | Phase 11 | Complete |
-| NPM-06 | Phase 16 | Pending |
-| NPM-07 | Phase 16 | Pending |
+| NPM-06 | Phase 16 | Complete |
+| NPM-07 | Phase 16 | Complete |
 | DEMO-01 | Phase 12 | Complete |
 | README-01 | Phase 13 | Complete |
 | README-02 | Phase 13 | Complete |
@@ -113,4 +113,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 15 completion*
+*Last updated: 2026-01-21 after v2.0 milestone audit*
