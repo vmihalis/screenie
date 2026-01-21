@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Instantly verify that a web app looks correct across all device sizes without manual testing - run one command, review one report.
-**Current focus:** v3.0 Viewport-First Capture
+**Current focus:** v3.0 Viewport-First Capture - Phase 21
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-01-21 — Milestone v3.0 started
+Phase: 21 of 23 (Capture Engine Changes)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-21 — Roadmap created for v3.0 milestone
 
 Progress: [░░░░░░░░░░] 0% (v3.0 Viewport-First Capture)
 
@@ -48,7 +48,7 @@ None - all todos resolved.
 
 ### Blockers/Concerns
 
-None — v2.2 milestone shipped.
+None.
 
 ### Tech Debt
 
@@ -63,10 +63,10 @@ From v2.2:
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: v2.2 milestone complete
+Stopped at: v3.0 roadmap created
 Resume file: None
 
 ---
 
 *State initialized: 2026-01-21*
-*Last updated: 2026-01-21 after v3.0 milestone started*
+*Last updated: 2026-01-21 after v3.0 roadmap created*
