@@ -123,6 +123,18 @@ describe('CLI Command Parsing', () => {
     });
   });
 
+  describe('--full-page option', () => {
+    it('parses --full-page flag', () => {
+      program.parse(['node', 'cli', 'http://localhost', '--full-page']);
+      expect(program.opts().fullPage).toBe(true);
+    });
+
+    it('fullPage is undefined when not specified', () => {
+      program.parse(['node', 'cli', 'http://localhost']);
+      expect(program.opts().fullPage).toBeUndefined();
+    });
+  });
+
   describe('combined options', () => {
     it('parses all options together', () => {
       program.parse([
@@ -134,6 +146,7 @@ describe('CLI Command Parsing', () => {
         '-w', '1000',
         '--phones-only',
         '-o', './out',
+        '--full-page',
       ]);
 
       expect(program.args[0]).toBe('http://localhost:3000');
@@ -143,6 +156,7 @@ describe('CLI Command Parsing', () => {
       expect(program.opts().wait).toBe(1000);
       expect(program.opts().phonesOnly).toBe(true);
       expect(program.opts().output).toBe('./out');
+      expect(program.opts().fullPage).toBe(true);
     });
   });
 
