@@ -26,10 +26,10 @@
   3. Fold line uses non-intrusive styling that doesn't obscure content
   4. Fold line position adjusts correctly when window is resized
   5. Fold line remains CSS-based (not baked into screenshot image)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 17-01: [To be determined during planning]
+- [ ] 17-01-PLAN.md — Implement fold line indicator (PNG dimension extraction, fold calculation, CSS styles, HTML rendering)
 
 ### Phase 18: Interactive Preview Modal
 **Goal**: Users can test the live site at any device dimensions
@@ -57,10 +57,10 @@ Phases execute in numeric order: 17 → 18
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 17. Fold Line Indicator | 0/TBD | Not started | - |
+| 17. Fold Line Indicator | 0/1 | Ready to execute | - |
 | 18. Interactive Preview Modal | 0/TBD | Not started | - |
 
 ---
 
 *Created: 2026-01-20*
-*Last updated: 2026-01-21 for v2.1 milestone planning*
+*Last updated: 2026-01-21 for Phase 17 planning*
