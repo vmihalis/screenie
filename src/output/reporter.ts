@@ -4,6 +4,76 @@ import type { ReportData, ScreenshotForReport } from './types.js';
 import type { DeviceCategory, Device } from '../devices/types.js';
 import type { ExecutionResult } from '../engine/types.js';
 
+/** Thumbnail aspect ratio constant to match CSS */
+const THUMBNAIL_ASPECT_RATIO = 16 / 10; // 1.6
+
+/**
+ * Extract width and height from PNG buffer without external dependencies.
+ * PNG files have a fixed header structure:
+ * - Bytes 0-7: PNG signature
+ * - Bytes 8-11: IHDR chunk length (always 13)
+ * - Bytes 12-15: IHDR chunk type
+ * - Bytes 16-19: Image width (big-endian)
+ * - Bytes 20-23: Image height (big-endian)
+ */
+export function getPngDimensions(buffer: Buffer): { width: number; height: number } {
+  // Verify PNG signature
+  const signature = buffer.subarray(0, 8);
+  const expectedSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+  if (!signature.equals(expectedSignature)) {
+    throw new Error('Invalid PNG file: incorrect signature');
+  }
+
+  // Read IHDR chunk (always first chunk after signature)
+  const width = buffer.readUInt32BE(16);
+  const height = buffer.readUInt32BE(20);
+
+  return { width, height };
+}
+
+/**
+ * Calculate fold line positions for both thumbnail and lightbox views.
+ *
+ * @param viewportHeight - Device viewport height (the fold position in pixels)
+ * @param screenshotWidth - Actual screenshot width in pixels
+ * @param screenshotHeight - Actual screenshot height in pixels
+ * @returns Fold positions for lightbox and thumbnail
+ */
+export function calculateFoldPositions(
+  viewportHeight: number,
+  screenshotWidth: number,
+  screenshotHeight: number
+): { lightboxPercent: number; thumbnailPercent: number | null } {
+  // Lightbox: direct percentage of screenshot height
+  const lightboxPercent = (viewportHeight / screenshotHeight) * 100;
+
+  // Thumbnail: need to account for object-fit: cover cropping
+  const screenshotAspectRatio = screenshotWidth / screenshotHeight;
+
+  // Calculate what percentage of screenshot is visible in thumbnail
+  // With object-fit: cover and object-position: top:
+  // - Image is scaled to fill width
+  // - Height is cropped from bottom
+  const visibleHeightPercent = Math.min(
+    100,
+    (THUMBNAIL_ASPECT_RATIO / screenshotAspectRatio) * 100
+  );
+
+  // Is the fold within the visible area?
+  let thumbnailPercent: number | null = null;
+  if (lightboxPercent <= visibleHeightPercent) {
+    // Scale to thumbnail's coordinate system
+    // Thumbnail's 100% = visibleHeightPercent of screenshot
+    thumbnailPercent = (lightboxPercent / visibleHeightPercent) * 100;
+  }
+
+  return {
+    lightboxPercent,
+    thumbnailPercent,
+  };
+}
+
 /**
  * Escape HTML special characters to prevent XSS
  */
@@ -383,12 +453,26 @@ export function prepareScreenshotsForReport(
     const device = deviceMap.get(result.deviceName);
     if (!device) continue;
 
+    // Extract actual screenshot dimensions from PNG buffer
+    const { width: screenshotWidth, height: screenshotHeight } = getPngDimensions(result.buffer);
+
+    // Calculate fold positions for thumbnail and lightbox
+    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(
+      device.height,
+      screenshotWidth,
+      screenshotHeight
+    );
+
     screenshots.push({
       deviceName: device.name,
       category: device.category,
       width: device.width,
       height: device.height,
       dataUri: bufferToDataUri(result.buffer),
+      screenshotWidth,
+      screenshotHeight,
+      foldPositionLightbox: lightboxPercent,
+      foldPositionThumbnail: thumbnailPercent,
     });
   }
 

@@ -10,6 +10,8 @@ import {
   getCategoryDisplayName,
   generateReport,
   prepareScreenshotsForReport,
+  getPngDimensions,
+  calculateFoldPositions,
 } from '../reporter.js';
 import type { ScreenshotForReport, ReportData } from '../types.js';
 import type { DeviceCategory, Device } from '../../devices/types.js';
@@ -17,6 +19,29 @@ import type { ExecutionResult } from '../../engine/types.js';
 
 // Test directory for file operations
 const TEST_OUTPUT_DIR = join(process.cwd(), '.test-output-reporter');
+
+/**
+ * Create a minimal valid PNG buffer for testing.
+ * PNG structure: signature (8) + IHDR chunk (25 bytes = 4 len + 4 type + 13 data + 4 crc)
+ */
+function createTestPngBuffer(width: number, height: number): Buffer {
+  // PNG signature (8 bytes)
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  // IHDR chunk: length (13) + "IHDR" + width + height + bit depth + color type + compression + filter + interlace
+  const ihdrData = Buffer.alloc(25);
+  ihdrData.writeUInt32BE(13, 0);  // chunk length
+  ihdrData.write('IHDR', 4);       // chunk type
+  ihdrData.writeUInt32BE(width, 8);
+  ihdrData.writeUInt32BE(height, 12);
+  ihdrData.writeUInt8(8, 16);     // bit depth
+  ihdrData.writeUInt8(2, 17);     // color type (RGB)
+  ihdrData.writeUInt8(0, 18);     // compression
+  ihdrData.writeUInt8(0, 19);     // filter
+  ihdrData.writeUInt8(0, 20);     // interlace
+  // CRC (can be invalid for dimension extraction tests)
+  ihdrData.writeUInt32BE(0, 21);
+  return Buffer.concat([signature, ihdrData]);
+}
 
 // ============================================================================
 // Helper Function Tests
@@ -184,8 +209,8 @@ describe('groupByCategory', () => {
 
   it('groups single category correctly', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone 1', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
-      { deviceName: 'Phone 2', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'Phone 1', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'Phone 2', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
     ];
     const result = groupByCategory(screenshots);
 
@@ -195,9 +220,9 @@ describe('groupByCategory', () => {
 
   it('groups multiple categories correctly', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
-      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:...' },
-      { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:...' },
+      { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:...', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
+      { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:...', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56 },
     ];
     const result = groupByCategory(screenshots);
 
@@ -209,9 +234,9 @@ describe('groupByCategory', () => {
 
   it('preserves order within category', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'First', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
-      { deviceName: 'Second', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
-      { deviceName: 'Third', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'First', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'Second', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'Third', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
     ];
     const result = groupByCategory(screenshots);
     const phones = result.get('phones');
@@ -247,6 +272,10 @@ const mockScreenshot: ScreenshotForReport = {
   width: 393,
   height: 852,
   dataUri: 'data:image/png;base64,iVBORw0KGgo=',
+  screenshotWidth: 393,
+  screenshotHeight: 3000,
+  foldPositionLightbox: 28.4,
+  foldPositionThumbnail: 50,
 };
 
 const mockReportData: ReportData = {
@@ -337,8 +366,8 @@ describe('HTML Template Output', () => {
 
     it('contains all thumbnail cards for category', async () => {
       const multiplePhones: ScreenshotForReport[] = [
-        { deviceName: 'Phone A', category: 'phones', width: 100, height: 200, dataUri: 'data:a' },
-        { deviceName: 'Phone B', category: 'phones', width: 100, height: 200, dataUri: 'data:b' },
+        { deviceName: 'Phone A', category: 'phones', width: 100, height: 200, dataUri: 'data:a', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+        { deviceName: 'Phone B', category: 'phones', width: 100, height: 200, dataUri: 'data:b', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
       ];
       await generateReport(mockReportData, multiplePhones, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -407,9 +436,9 @@ describe('HTML Template Output', () => {
 
     it('contains all three categories when present', async () => {
       const allCategories: ScreenshotForReport[] = [
-        { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:phone' },
-        { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet' },
-        { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:pc' },
+        { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:phone', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+        { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
+        { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:pc', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56 },
       ];
       await generateReport(mockReportData, allCategories, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -421,8 +450,8 @@ describe('HTML Template Output', () => {
 
     it('contains lightbox elements for all screenshots', async () => {
       const twoDevices: ScreenshotForReport[] = [
-        { deviceName: 'Device A', category: 'phones', width: 100, height: 200, dataUri: 'data:a' },
-        { deviceName: 'Device B', category: 'tablets', width: 768, height: 1024, dataUri: 'data:b' },
+        { deviceName: 'Device A', category: 'phones', width: 100, height: 200, dataUri: 'data:a', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+        { deviceName: 'Device B', category: 'tablets', width: 768, height: 1024, dataUri: 'data:b', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
       ];
       await generateReport(mockReportData, twoDevices, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -484,8 +513,9 @@ describe('prepareScreenshotsForReport', () => {
     const devices: Device[] = [
       createTestDevice('iPhone 15 Pro', 'phones', 393, 852),
     ];
+    const pngBuffer = createTestPngBuffer(393, 3000);
     const results: ExecutionResult[] = [
-      createTestResult('iPhone 15 Pro', true, Buffer.from('PNG data')),
+      createTestResult('iPhone 15 Pro', true, pngBuffer),
     ];
 
     const screenshots = prepareScreenshotsForReport(results, devices);
@@ -496,6 +526,11 @@ describe('prepareScreenshotsForReport', () => {
     expect(screenshots[0]?.width).toBe(393);
     expect(screenshots[0]?.height).toBe(852);
     expect(screenshots[0]?.dataUri).toMatch(/^data:image\/png;base64,/);
+    // Verify fold position fields are populated
+    expect(screenshots[0]?.screenshotWidth).toBe(393);
+    expect(screenshots[0]?.screenshotHeight).toBe(3000);
+    expect(screenshots[0]?.foldPositionLightbox).toBeCloseTo(28.4, 1);
+    expect(screenshots[0]?.foldPositionThumbnail).not.toBeNull();
   });
 
   it('skips failed results (success: false)', () => {
@@ -503,8 +538,9 @@ describe('prepareScreenshotsForReport', () => {
       createTestDevice('Device A', 'phones'),
       createTestDevice('Device B', 'phones'),
     ];
+    const pngBuffer = createTestPngBuffer(393, 3000);
     const results: ExecutionResult[] = [
-      createTestResult('Device A', true, Buffer.from('data')),
+      createTestResult('Device A', true, pngBuffer),
       createTestResult('Device B', false, undefined),
     ];
 
@@ -532,9 +568,10 @@ describe('prepareScreenshotsForReport', () => {
 
   it('skips results with unknown device names', () => {
     const devices: Device[] = [createTestDevice('Known Device', 'phones')];
+    const pngBuffer = createTestPngBuffer(393, 3000);
     const results: ExecutionResult[] = [
-      createTestResult('Known Device', true, Buffer.from('data')),
-      createTestResult('Unknown Device', true, Buffer.from('data')),
+      createTestResult('Known Device', true, pngBuffer),
+      createTestResult('Unknown Device', true, pngBuffer),
     ];
 
     const screenshots = prepareScreenshotsForReport(results, devices);
@@ -548,9 +585,11 @@ describe('prepareScreenshotsForReport', () => {
       { name: 'iPad Pro', width: 1024, height: 1366, deviceScaleFactor: 2, category: 'tablets' },
       { name: 'MacBook Pro', width: 1728, height: 1117, deviceScaleFactor: 2, category: 'pc-laptops' },
     ];
+    const ipadPng = createTestPngBuffer(1024, 3000);
+    const macbookPng = createTestPngBuffer(1728, 2500);
     const results: ExecutionResult[] = [
-      createTestResult('iPad Pro', true, Buffer.from('ipad-data')),
-      createTestResult('MacBook Pro', true, Buffer.from('macbook-data')),
+      createTestResult('iPad Pro', true, ipadPng),
+      createTestResult('MacBook Pro', true, macbookPng),
     ];
 
     const screenshots = prepareScreenshotsForReport(results, devices);
@@ -563,12 +602,16 @@ describe('prepareScreenshotsForReport', () => {
     expect(ipad?.width).toBe(1024);
     expect(ipad?.height).toBe(1366);
     expect(ipad?.dataUri).toContain('base64');
+    expect(ipad?.screenshotWidth).toBe(1024);
+    expect(ipad?.screenshotHeight).toBe(3000);
 
     const macbook = screenshots.find((s) => s.deviceName === 'MacBook Pro');
     expect(macbook).toBeDefined();
     expect(macbook?.category).toBe('pc-laptops');
     expect(macbook?.width).toBe(1728);
     expect(macbook?.height).toBe(1117);
+    expect(macbook?.screenshotWidth).toBe(1728);
+    expect(macbook?.screenshotHeight).toBe(2500);
   });
 
   it('handles empty arrays', () => {
@@ -660,6 +703,10 @@ describe('generateReport', () => {
         width: 375,
         height: 812,
         dataUri: 'data:image/png;base64,ABC123',
+        screenshotWidth: 375,
+        screenshotHeight: 2000,
+        foldPositionLightbox: 40.6,
+        foldPositionThumbnail: 63.4,
       },
     ];
 
@@ -674,9 +721,9 @@ describe('generateReport', () => {
 
   it('handles multiple screenshots across categories', async () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone', category: 'phones', width: 375, height: 812, dataUri: 'data:phone' },
-      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet' },
-      { deviceName: 'Desktop', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:desktop' },
+      { deviceName: 'Phone', category: 'phones', width: 375, height: 812, dataUri: 'data:phone', screenshotWidth: 375, screenshotHeight: 2000, foldPositionLightbox: 40.6, foldPositionThumbnail: 63.4 },
+      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet', screenshotWidth: 768, screenshotHeight: 2500, foldPositionLightbox: 40.96, foldPositionThumbnail: 64 },
+      { deviceName: 'Desktop', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:desktop', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56.25 },
     ];
 
     const reportPath = await generateReport(mockReportData, screenshots, TEST_OUTPUT_DIR);
