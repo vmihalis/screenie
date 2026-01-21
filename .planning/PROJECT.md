@@ -2,7 +2,7 @@
 
 ## What This Is
 
-An open source CLI tool that captures responsive screenshots across 57 device dimensions and generates HTML reports with fold line indicators and interactive device previews for quick visual review. Published on npm as `screenie-tool` with documentation at dist-xi-virid.vercel.app and a landing page at landing-gilt-psi-18.vercel.app.
+An open source CLI tool that captures responsive screenshots across 57 device dimensions and generates HTML reports with interactive device previews for quick visual review. Published on npm as `screenie-tool` with documentation at dist-xi-virid.vercel.app and a landing page at landing-gilt-psi-18.vercel.app.
 
 ## Core Value
 
@@ -16,6 +16,16 @@ Instantly verify that a web app looks correct across all device sizes without ma
 **Docs:** https://dist-xi-virid.vercel.app
 
 The tool is complete and published. All v1.0, v2.0, v2.1, and v2.2 requirements are validated.
+
+## Current Milestone: v3.0 Viewport-First Capture
+
+**Goal:** Change default screenshot behavior from full-page to viewport-only, making the grid view actually scannable while relying on interactive preview for full page exploration.
+
+**Target features:**
+- Viewport-only screenshots as default behavior
+- `--full-page` flag to restore full-page capture when needed
+- Remove fold line indicator (redundant with viewport-only capture)
+- Major version bump with clear changelog
 
 ## Requirements
 
@@ -95,7 +105,14 @@ The tool is complete and published. All v1.0, v2.0, v2.1, and v2.2 requirements 
 - ✓ `INST-02` Quick-start hint (in version banner) — v2.2
 - — `INST-01` Postinstall script — Skipped (security anti-pattern in 2026)
 
-### Future (v2.3+)
+### Active (v3.0)
+
+- [ ] Viewport-only screenshots as default capture mode
+- [ ] `--full-page` flag for original full-page behavior
+- [ ] Remove fold line indicator from report
+- [ ] Update documentation for new default behavior
+
+### Future (v3.1+)
 
 - Config file support (.responsiverc.json)
 - Custom viewport definitions via config
@@ -110,8 +127,6 @@ The tool is complete and published. All v1.0, v2.0, v2.1, and v2.2 requirements 
 - Feature cards on landing page
 - Example gallery showing actual reports
 - Custom domain setup (screenie.xyz, docs.screenie.xyz)
-- Toggle button to show/hide fold lines globally
-- Fold line label showing viewport height
 - Keyboard navigation (arrow keys to cycle devices in preview)
 - Side-by-side comparison mode
 
@@ -124,15 +139,17 @@ The tool is complete and published. All v1.0, v2.0, v2.1, and v2.2 requirements 
 - User accounts/authentication — open source tool, no login
 - Cross-browser (Firefox/Safari) — Chrome sufficient for layout verification
 - PDF/video export — focus on screenshots + HTML
-- Fold line baked into screenshot image — CSS overlay allows toggling later
 - Video recording of interactions — focus on screenshots
+- Fold line toggle (removed) — viewport-only screenshots make fold line redundant
 
 ## Context
 
-v2.2 shipped with ASCII art branding:
-- Branded ASCII art banner using figlet Big font
-- Terminal width detection with graceful font fallback (Big → Small → Mini → plain text)
-- Non-TTY output returns plain text for CI/pipe compatibility
+v3.0 changes the fundamental capture philosophy:
+- Full-page screenshots were the original approach (v1.0-v2.2)
+- For long pages, full-page screenshots become unwieldy (10,000px+ images)
+- Interactive preview (added v2.1) proved more useful for exploring content
+- Viewport-only screenshots enable quick visual scanning in the grid
+- `--full-page` flag preserves original behavior for users who need it
 
 Tech stack: Node.js 20+, Playwright (Chromium), TypeScript, tsup, Vitest, figlet.
 7,395 LOC TypeScript, 353 tests passing.
@@ -176,4 +193,4 @@ Tech stack: Node.js 20+, Playwright (Chromium), TypeScript, tsup, Vitest, figlet
 | Skip postinstall banner | Security anti-pattern (pnpm 10+ disables by default) | ✓ Good |
 
 ---
-*Last updated: 2026-01-21 after v2.2 milestone*
+*Last updated: 2026-01-21 after v3.0 milestone started*
