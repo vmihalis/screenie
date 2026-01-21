@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 ## Current Position
 
 Phase: 23 of 23 (Documentation Release) - COMPLETE
-Plan: 01 of 01 - COMPLETE
-Status: Phase complete - v3.0 ready for release
-Last activity: 2026-01-22 - Completed 23-01-PLAN.md
+Plan: 02 of 02 - COMPLETE
+Status: Phase complete - v3.0 ready for npm publish
+Last activity: 2026-01-22 - Completed 23-02-PLAN.md
 
-Progress: [███████░░░] 75% (v3.0 Viewport-First Capture)
+Progress: [█████████░] 100% (v3.0 Viewport-First Capture COMPLETE)
 
 ## Performance Metrics
 
-**v3.0 Velocity (in progress):**
-- Plans completed: 4
-- Total duration: 17min (3min + 8min + 4min + 2min)
+**v3.0 Velocity (COMPLETE):**
+- Plans completed: 5
+- Total duration: 18min (3min + 8min + 4min + 2min + 1min)
 - Phases completed: 3 (Phase 21, Phase 22, Phase 23)
 
 **v2.2 Velocity:**
@@ -29,9 +29,9 @@ Progress: [███████░░░] 75% (v3.0 Viewport-First Capture)
 - Phases completed: 2
 
 **Cumulative:**
-- Milestones shipped: 4 (v1.0, v2.0, v2.1, v2.2)
+- Milestones shipped: 5 (v1.0, v2.0, v2.1, v2.2, v3.0)
 - Total phases completed: 23
-- Total plans completed: 46
+- Total plans completed: 47
 - Total days: 2
 
 ## Accumulated Context
@@ -40,7 +40,7 @@ Progress: [███████░░░] 75% (v3.0 Viewport-First Capture)
 
 Decisions are logged in PROJECT.md Key Decisions table.
 
-v3.0 decisions (in progress):
+v3.0 decisions (COMPLETE):
 - fullPage defaults to false (viewport-only) - users opt-in to full-page capture
 - CLI flag named --full-page (kebab-case) for consistency with existing flags
 - Optional boolean pattern: flag presence = true, absence = undefined
@@ -48,6 +48,9 @@ v3.0 decisions (in progress):
 - Dynamic screenshot mode threaded through CLI -> actions -> executor -> capturer
 - Fold line removed entirely (viewport-only capture = entire screenshot IS "above the fold")
 - Lightbox outputs img directly without wrapper div
+- Keep a Changelog 1.0.0 format for version history
+- BREAKING CHANGES section with explicit migration examples
+- npm version major command for atomic version bumps
 
 v2.2 decisions marked as Good:
 - Figlet Big font for ASCII banner
@@ -77,10 +80,10 @@ From v2.2:
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Phase 23 complete - v3.0 documentation release ready
+Stopped at: v3.0 COMPLETE - ready for npm publish
 Resume file: None
 
 ---
 
 *State initialized: 2026-01-21*
-*Last updated: 2026-01-22 after Phase 23 complete*
+*Last updated: 2026-01-22 after v3.0 COMPLETE*
