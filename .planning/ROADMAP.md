@@ -2,13 +2,14 @@
 
 **Milestone:** v2.2 ASCII Art Branding
 **Created:** 2026-01-21
-**Phases:** 1 (Phase 19)
+**Phases:** 2 (Phases 19-20)
 
 ## Overview
 
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|--------------|------------------|
 | 19 | ASCII Art Branding | Add branded ASCII banner to version display | BRAND-01, BRAND-02, BRAND-03, CLI-05, CLI-06, INST-02 | 5 |
+| 20 | ASCII Banner Terminal Width | Detect narrow terminals and fall back to plain text or smaller font | BRAND-04 | 3 |
 
 ## Phase Details
 
@@ -42,6 +43,28 @@ Plans:
 
 ---
 
+### Phase 20: ASCII Banner Terminal Width
+
+**Goal:** Detect narrow terminals and fall back to plain text or smaller font for ASCII banner.
+
+**Depends on:** Phase 19
+**Plans:** 1 plan
+
+Plans:
+- [ ] 20-01-PLAN.md — Add width detection and font fallback to banner module
+
+**Requirements covered:**
+- BRAND-04: Graceful handling of narrow terminal widths
+
+**Success criteria:**
+1. Banner detects terminal width at runtime
+2. Falls back to smaller font or plain text when terminal is narrow (<80 columns)
+3. All existing tests continue to pass
+
+**Dependencies:** Phase 19 (ASCII Art Branding)
+
+---
+
 ## Requirement Coverage
 
 6 of 7 v2.2 requirements mapped to Phase 19.
@@ -56,9 +79,10 @@ INST-01 (postinstall banner) intentionally skipped per security best practices.
 | CLI-06 | 19 | -v alias |
 | INST-01 | — | Skipped (security anti-pattern) |
 | INST-02 | 19 | Quick-start hint (in version banner) |
+| BRAND-04 | 20 | Terminal width handling |
 
-**Coverage:** 6/7 (86%) - INST-01 intentionally skipped
+**Coverage:** 7/8 (88%) - INST-01 intentionally skipped
 
 ---
 *Roadmap created: 2026-01-21*
-*Last updated: 2026-01-21 after Phase 19 execution*
+*Last updated: 2026-01-21 after Phase 20 planning*
