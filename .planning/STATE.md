@@ -55,7 +55,8 @@ All v2.1 decisions marked as Good:
 
 ### Pending Todos
 
-None.
+1 todo pending:
+- ASCII banner too wide for small terminal sizes (ui)
 
 ### Blockers/Concerns
 
