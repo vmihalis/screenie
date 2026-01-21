@@ -151,8 +151,11 @@ describe('CLI Command Parsing', () => {
       expect(program.name()).toBe('screenie');
     });
 
-    it('has version set', () => {
-      expect(program.version()).toMatch(/^\d+\.\d+\.\d+/);
+    it('version is handled via custom banner (not Commander built-in)', () => {
+      // Version display is handled in index.ts before Commander parsing
+      // to show ASCII art banner instead of plain version number
+      // This test confirms version is NOT set on Commander directly
+      expect(program.version()).toBeUndefined();
     });
 
     it('has description set', () => {

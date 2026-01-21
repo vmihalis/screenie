@@ -71,7 +71,23 @@ describe('CLI E2E', () => {
       const result = await invokeCli(['--version']);
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toMatch(/\d+\.\d+\.\d+/);
+      // ASCII art banner contains distinctive ASCII patterns (figlet "Big" font)
+      expect(result.stdout).toContain('_____');
+      // Should include version number
+      expect(result.stdout).toMatch(/v\d+\.\d+\.\d+/);
+      // Should include tagline
+      expect(result.stdout).toContain('device viewports');
+      // Should include quick-start hint
+      expect(result.stdout).toContain('screenie --help');
+    });
+
+    it('shows version with -v alias', async () => {
+      const result = await invokeCli(['-v']);
+
+      expect(result.exitCode).toBe(0);
+      // Should display same ASCII banner
+      expect(result.stdout).toContain('_____');
+      expect(result.stdout).toMatch(/v\d+\.\d+\.\d+/);
     });
   });
 

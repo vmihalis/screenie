@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { generateBanner } from './banner.js';
 
 declare const __PKG_VERSION__: string;
 
@@ -10,7 +11,6 @@ export function createProgram(): Command {
   const program = new Command()
     .name('screenie')
     .description('Capture responsive screenshots across 50+ device viewports')
-    .version(__PKG_VERSION__)
 
     // Required: base URL
     .argument('<url>', 'Base URL to capture (e.g., http://localhost:3000)')
