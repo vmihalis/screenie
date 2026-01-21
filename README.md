@@ -1,6 +1,6 @@
-[![npm version](https://img.shields.io/npm/v/screenie)](https://www.npmjs.com/package/screenie)
-[![npm downloads](https://img.shields.io/npm/dm/screenie)](https://www.npmjs.com/package/screenie)
-[![license](https://img.shields.io/npm/l/screenie)](https://github.com/memehalis/screenie/blob/master/LICENSE)
+[![npm version](https://img.shields.io/npm/v/screenie-tool)](https://www.npmjs.com/package/screenie-tool)
+[![npm downloads](https://img.shields.io/npm/dm/screenie-tool)](https://www.npmjs.com/package/screenie-tool)
+[![license](https://img.shields.io/npm/l/screenie-tool)](https://github.com/vmihalis/responsiveness-mcp/blob/master/LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 
 # screenie
@@ -14,7 +14,7 @@ Capture responsive design screenshots across 57 device viewports with one comman
 ## Quick Start
 
 ```bash
-npx screenie https://your-site.com
+npx screenie-tool https://your-site.com
 ```
 
 Screenshots are saved to `./screenshots/` and an HTML report opens automatically.
@@ -50,7 +50,7 @@ With screenie:
 No installation needed. Just run:
 
 ```bash
-npx screenie https://your-site.com
+npx screenie-tool https://your-site.com
 ```
 
 This downloads and runs screenie in one step.
@@ -60,7 +60,7 @@ This downloads and runs screenie in one step.
 For frequent use, install globally:
 
 ```bash
-npm install -g screenie
+npm install -g screenie-tool
 ```
 
 Then run anywhere:

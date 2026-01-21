@@ -7,7 +7,7 @@ Real-world usage examples for common scenarios.
 Capture all device viewports for a website:
 
 ```bash
-npx screenie https://example.com
+npx screenie-tool https://example.com
 ```
 
 **Output:** 57 screenshots in `./screenshots/` + HTML report
@@ -17,7 +17,7 @@ npx screenie https://example.com
 Capture a specific page path:
 
 ```bash
-npx screenie https://example.com /about
+npx screenie-tool https://example.com /about
 ```
 
 **Output:** Screenshots of `https://example.com/about` across all devices
@@ -27,7 +27,7 @@ npx screenie https://example.com /about
 Capture multiple pages in one command:
 
 ```bash
-npx screenie https://example.com --pages /home /about /contact /pricing
+npx screenie-tool https://example.com --pages /home /about /contact /pricing
 ```
 
 **Output:** 57 screenshots × 4 pages = 228 total screenshots
@@ -39,7 +39,7 @@ More efficient than running screenie 4 separate times.
 Test mobile-specific layouts without capturing tablets or desktops:
 
 ```bash
-npx screenie https://example.com --phones-only
+npx screenie-tool https://example.com --phones-only
 ```
 
 **Output:** 24 phone screenshots (faster capture)
@@ -51,7 +51,7 @@ npx screenie https://example.com --phones-only
 Test tablet-specific layouts:
 
 ```bash
-npx screenie https://example.com --tablets-only
+npx screenie-tool https://example.com --tablets-only
 ```
 
 **Output:** 16 tablet screenshots
@@ -63,7 +63,7 @@ npx screenie https://example.com --tablets-only
 Test desktop-specific layouts:
 
 ```bash
-npx screenie https://example.com --desktops-only
+npx screenie-tool https://example.com --desktops-only
 ```
 
 **Output:** 17 desktop screenshots
@@ -75,7 +75,7 @@ npx screenie https://example.com --desktops-only
 Save screenshots to a specific location:
 
 ```bash
-npx screenie https://example.com --output ./build/screenshots
+npx screenie-tool https://example.com --output ./build/screenshots
 ```
 
 **Output:** Screenshots saved to `./build/screenshots/` instead of default `./screenshots/`
@@ -87,7 +87,7 @@ npx screenie https://example.com --output ./build/screenshots
 Run in CI environment without opening the report:
 
 ```bash
-npx screenie https://example.com --no-open
+npx screenie-tool https://example.com --no-open
 ```
 
 **Output:** Screenshots and report generated, but browser doesn't open
@@ -103,7 +103,7 @@ Capture screenshots from a local development server:
 npm run dev
 
 # In another terminal
-npx screenie http://localhost:3000
+npx screenie-tool http://localhost:3000
 ```
 
 **Use case:** Testing during development
@@ -114,10 +114,10 @@ Control parallelism for faster or more conservative capture:
 
 ```bash
 # Fast capture (high CPU usage)
-npx screenie https://example.com --concurrency 10
+npx screenie-tool https://example.com --concurrency 10
 
 # Conservative capture (low CPU usage)
-npx screenie https://example.com --concurrency 2
+npx screenie-tool https://example.com --concurrency 2
 ```
 
 **Use case:** Balance speed vs. system resources
@@ -127,7 +127,7 @@ npx screenie https://example.com --concurrency 2
 Add wait time for animations or lazy-loaded content:
 
 ```bash
-npx screenie https://example.com --wait 1000
+npx screenie-tool https://example.com --wait 1000
 ```
 
 **Output:** Wait 1 second after page load before capturing
@@ -139,7 +139,7 @@ npx screenie https://example.com --wait 1000
 Combine multiple options for complex scenarios:
 
 ```bash
-npx screenie http://localhost:3000 \
+npx screenie-tool http://localhost:3000 \
   --pages /home /products /about \
   --phones-only \
   --concurrency 5 \
@@ -163,7 +163,7 @@ npx screenie http://localhost:3000 \
 Test staging environment before production deploy:
 
 ```bash
-npx screenie https://staging.myapp.com --pages / /features /pricing
+npx screenie-tool https://staging.myapp.com --pages / /features /pricing
 ```
 
 **Use case:** Pre-deployment verification
@@ -173,7 +173,7 @@ npx screenie https://staging.myapp.com --pages / /features /pricing
 Test specific components or pages:
 
 ```bash
-npx screenie http://localhost:6006 --pages /button /form /modal
+npx screenie-tool http://localhost:6006 --pages /button /form /modal
 ```
 
 **Use case:** Testing Storybook components across viewports
@@ -183,7 +183,7 @@ npx screenie http://localhost:6006 --pages /button /form /modal
 Verify all breakpoints in your responsive design:
 
 ```bash
-npx screenie https://example.com
+npx screenie-tool https://example.com
 ```
 
 **Output:** 57 viewports covering:
@@ -198,7 +198,7 @@ npx screenie https://example.com
 Test documentation site responsiveness:
 
 ```bash
-npx screenie https://docs.myapi.com --pages / /quickstart /api-reference /examples
+npx screenie-tool https://docs.myapi.com --pages / /quickstart /api-reference /examples
 ```
 
 **Use case:** Verify documentation is readable on all devices
@@ -208,7 +208,7 @@ npx screenie https://docs.myapi.com --pages / /quickstart /api-reference /exampl
 Test product pages across devices:
 
 ```bash
-npx screenie https://shop.example.com --pages /products/123 /products/456 /cart /checkout
+npx screenie-tool https://shop.example.com --pages /products/123 /products/456 /cart /checkout
 ```
 
 **Use case:** Verify product images, descriptions, and checkout flow on all viewports

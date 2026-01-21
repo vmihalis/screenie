@@ -5,7 +5,7 @@
 Run without installation:
 
 ```bash
-npx screenie https://your-site.com
+npx screenie-tool https://your-site.com
 ```
 
 Screenshots are saved to `./screenshots/` and an HTML report opens automatically in your browser.
@@ -17,7 +17,7 @@ Screenshots are saved to `./screenshots/` and an HTML report opens automatically
 No installation needed - run directly with npx:
 
 ```bash
-npx screenie https://your-site.com
+npx screenie-tool https://your-site.com
 ```
 
 This is the recommended approach as it always uses the latest version.
@@ -27,7 +27,7 @@ This is the recommended approach as it always uses the latest version.
 For frequent use, install globally:
 
 ```bash
-npm install -g screenie
+npm install -g screenie-tool
 ```
 
 Then run anywhere:
@@ -46,7 +46,7 @@ screenie https://your-site.com
 Capture all device viewports for a website:
 
 ```bash
-npx screenie https://example.com
+npx screenie-tool https://example.com
 ```
 
 This will:
