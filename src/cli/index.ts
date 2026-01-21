@@ -4,6 +4,13 @@
 import { program } from './commands.js';
 import { runCapture, handleError } from './actions.js';
 import type { CLIOptions } from './types.js';
+import updateNotifier from 'update-notifier';
+
+declare const __PKG_NAME__: string;
+declare const __PKG_VERSION__: string;
+
+// Check for updates (non-blocking, cached for 1 day)
+updateNotifier({ pkg: { name: __PKG_NAME__, version: __PKG_VERSION__ } }).notify();
 
 // Connect action handler to program
 program.action(async (url: string, path: string | undefined, options: CLIOptions) => {

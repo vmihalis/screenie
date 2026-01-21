@@ -152,7 +152,7 @@ describe('CLI Command Parsing', () => {
     });
 
     it('has version set', () => {
-      expect(program.version()).toBe('1.0.0');
+      expect(program.version()).toMatch(/^\d+\.\d+\.\d+/);
     });
 
     it('has description set', () => {

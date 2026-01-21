@@ -37,10 +37,12 @@
     "ora": "^8.0.0",
     "p-limit": "^6.0.0",
     "picocolors": "^1.0.0",
-    "playwright": "^1.51.0"
+    "playwright": "^1.51.0",
+    "update-notifier": "^7.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@types/update-notifier": "^6.0.8",
     "execa": "^9.6.1",
     "strip-ansi": "^7.1.2",
     "tsup": "^8.0.0",

@@ -71,7 +71,7 @@ describe('CLI E2E', () => {
       const result = await invokeCli(['--version']);
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toContain('1.0.0');
+      expect(result.stdout).toMatch(/\d+\.\d+\.\d+/);
     });
   });
 

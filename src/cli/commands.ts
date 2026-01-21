@@ -1,5 +1,7 @@
 import { Command } from 'commander';
 
+declare const __PKG_VERSION__: string;
+
 /**
  * Create Commander program with all CLI arguments and options
  * Separated from action handler for testability
@@ -8,7 +10,7 @@ export function createProgram(): Command {
   const program = new Command()
     .name('screenie')
     .description('Capture responsive screenshots across 50+ device viewports')
-    .version('1.0.0')
+    .version(__PKG_VERSION__)
 
     // Required: base URL
     .argument('<url>', 'Base URL to capture (e.g., http://localhost:3000)')
