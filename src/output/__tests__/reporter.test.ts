@@ -10,8 +10,6 @@ import {
   getCategoryDisplayName,
   generateReport,
   prepareScreenshotsForReport,
-  getPngDimensions,
-  calculateFoldPositions,
   generateModalTemplate,
   renderThumbnailCard,
 } from '../reporter.js';
@@ -211,8 +209,8 @@ describe('groupByCategory', () => {
 
   it('groups single category correctly', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone 1', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-      { deviceName: 'Phone 2', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'Phone 1', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'Phone 2', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
     ];
     const result = groupByCategory(screenshots);
 
@@ -222,9 +220,9 @@ describe('groupByCategory', () => {
 
   it('groups multiple categories correctly', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:...', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
-      { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:...', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56 },
+      { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:...' },
+      { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:...' },
     ];
     const result = groupByCategory(screenshots);
 
@@ -236,9 +234,9 @@ describe('groupByCategory', () => {
 
   it('preserves order within category', () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'First', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-      { deviceName: 'Second', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-      { deviceName: 'Third', category: 'phones', width: 100, height: 200, dataUri: 'data:...', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+      { deviceName: 'First', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'Second', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
+      { deviceName: 'Third', category: 'phones', width: 100, height: 200, dataUri: 'data:...' },
     ];
     const result = groupByCategory(screenshots);
     const phones = result.get('phones');
@@ -264,113 +262,6 @@ describe('getCategoryDisplayName', () => {
 });
 
 // ============================================================================
-// Fold Line Function Tests
-// ============================================================================
-
-describe('getPngDimensions', () => {
-  it('extracts correct width and height from valid PNG buffer', () => {
-    const buffer = createTestPngBuffer(800, 600);
-    const dimensions = getPngDimensions(buffer);
-    expect(dimensions.width).toBe(800);
-    expect(dimensions.height).toBe(600);
-  });
-
-  it('handles large dimensions', () => {
-    const buffer = createTestPngBuffer(1920, 10000);
-    const dimensions = getPngDimensions(buffer);
-    expect(dimensions.width).toBe(1920);
-    expect(dimensions.height).toBe(10000);
-  });
-
-  it('handles small dimensions', () => {
-    const buffer = createTestPngBuffer(1, 1);
-    const dimensions = getPngDimensions(buffer);
-    expect(dimensions.width).toBe(1);
-    expect(dimensions.height).toBe(1);
-  });
-
-  it('throws "Invalid PNG file: incorrect signature" for non-PNG buffer', () => {
-    const invalidBuffer = Buffer.from('This is not a PNG file');
-    expect(() => getPngDimensions(invalidBuffer)).toThrow('Invalid PNG file: incorrect signature');
-  });
-
-  it('throws for buffer too short', () => {
-    const shortBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
-    expect(() => getPngDimensions(shortBuffer)).toThrow();
-  });
-
-  it('throws for empty buffer', () => {
-    const emptyBuffer = Buffer.alloc(0);
-    expect(() => getPngDimensions(emptyBuffer)).toThrow();
-  });
-});
-
-describe('calculateFoldPositions', () => {
-  it('calculates lightboxPercent correctly (viewport 852px, screenshot 3000px)', () => {
-    const { lightboxPercent } = calculateFoldPositions(852, 393, 3000);
-    expect(lightboxPercent).toBeCloseTo(28.4, 1);
-  });
-
-  it('returns thumbnailPercent when fold is above visible area (short page)', () => {
-    // For a short page where the fold is within the thumbnail's visible area
-    // Width 393, height 400 -> aspect ratio 0.9825
-    // visibleHeightPercent = min(100, 1.6 / 0.9825 * 100) = 100 (entire image visible)
-    // lightboxPercent = 200 / 400 * 100 = 50%
-    // Since 50% <= 100%, thumbnailPercent = 50 / 100 * 100 = 50%
-    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(200, 393, 400);
-    expect(lightboxPercent).toBe(50);
-    expect(thumbnailPercent).toBe(50);
-  });
-
-  it('returns null thumbnailPercent when fold is below visible area (very tall screenshot)', () => {
-    // Very tall screenshot: width 393, height 10000 -> aspect ratio 0.0393
-    // visibleHeightPercent = min(100, 1.6 / 0.0393 * 100) = min(100, 4071) = 100
-    // But wait, for a tall narrow screenshot, the aspect ratio is low,
-    // so visibleHeightPercent would be capped at 100 (entire image visible)
-    // Let's test with a wide screenshot instead
-
-    // Actually, with object-fit: cover and object-position: top,
-    // a tall narrow image would be scaled to fill the width, showing more height
-    // Let's use a wider screenshot: width 1920, height 800
-    // aspect ratio = 2.4
-    // visibleHeightPercent = min(100, 1.6 / 2.4 * 100) = min(100, 66.67) = 66.67%
-    // If viewport 800px, lightboxPercent = 100%
-    // Since 100% > 66.67%, thumbnailPercent = null
-    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(800, 1920, 800);
-    expect(lightboxPercent).toBe(100);
-    // For this case, the fold is at the bottom of the screenshot
-    // which is beyond the visible 66.67% in the thumbnail
-    expect(thumbnailPercent).toBeNull();
-  });
-
-  it('calculates correctly when viewport equals screenshot height (fold at 100%)', () => {
-    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(1000, 393, 1000);
-    expect(lightboxPercent).toBe(100);
-    // For narrow screenshot (aspect 0.393), all height is visible in thumbnail
-    expect(thumbnailPercent).toBe(100);
-  });
-
-  it('handles different aspect ratios correctly', () => {
-    // Test with a wider screenshot where thumbnail crops more
-    // Width 1920, height 1080 -> aspect ratio ~1.78
-    // Thumbnail aspect ratio = 1.6
-    // visibleHeightPercent = 1.6 / 1.78 * 100 = 89.9%
-    // Viewport 540px (half of 1080), lightboxPercent = 50%
-    // 50% <= 89.9%, so thumbnailPercent = 50 / 89.9 * 100 = 55.6%
-    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(540, 1920, 1080);
-    expect(lightboxPercent).toBe(50);
-    expect(thumbnailPercent).toBeCloseTo(55.6, 0);
-  });
-
-  it('handles extreme case where fold is at top (viewport near 0)', () => {
-    const { lightboxPercent, thumbnailPercent } = calculateFoldPositions(10, 393, 1000);
-    expect(lightboxPercent).toBe(1);
-    expect(thumbnailPercent).not.toBeNull();
-    expect(thumbnailPercent).toBe(1);
-  });
-});
-
-// ============================================================================
 // HTML Template Tests (via generateReport output)
 // ============================================================================
 
@@ -381,10 +272,6 @@ const mockScreenshot: ScreenshotForReport = {
   width: 393,
   height: 852,
   dataUri: 'data:image/png;base64,iVBORw0KGgo=',
-  screenshotWidth: 393,
-  screenshotHeight: 3000,
-  foldPositionLightbox: 28.4,
-  foldPositionThumbnail: 50,
 };
 
 const mockReportData: ReportData = {
@@ -475,8 +362,8 @@ describe('HTML Template Output', () => {
 
     it('contains all thumbnail cards for category', async () => {
       const multiplePhones: ScreenshotForReport[] = [
-        { deviceName: 'Phone A', category: 'phones', width: 100, height: 200, dataUri: 'data:a', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-        { deviceName: 'Phone B', category: 'phones', width: 100, height: 200, dataUri: 'data:b', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
+        { deviceName: 'Phone A', category: 'phones', width: 100, height: 200, dataUri: 'data:a' },
+        { deviceName: 'Phone B', category: 'phones', width: 100, height: 200, dataUri: 'data:b' },
       ];
       await generateReport(mockReportData, multiplePhones, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -545,9 +432,9 @@ describe('HTML Template Output', () => {
 
     it('contains all three categories when present', async () => {
       const allCategories: ScreenshotForReport[] = [
-        { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:phone', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-        { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
-        { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:pc', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56 },
+        { deviceName: 'Phone', category: 'phones', width: 100, height: 200, dataUri: 'data:phone' },
+        { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet' },
+        { deviceName: 'PC', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:pc' },
       ];
       await generateReport(mockReportData, allCategories, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -559,8 +446,8 @@ describe('HTML Template Output', () => {
 
     it('contains lightbox elements for all screenshots', async () => {
       const twoDevices: ScreenshotForReport[] = [
-        { deviceName: 'Device A', category: 'phones', width: 100, height: 200, dataUri: 'data:a', screenshotWidth: 100, screenshotHeight: 500, foldPositionLightbox: 40, foldPositionThumbnail: 60 },
-        { deviceName: 'Device B', category: 'tablets', width: 768, height: 1024, dataUri: 'data:b', screenshotWidth: 768, screenshotHeight: 2000, foldPositionLightbox: 51.2, foldPositionThumbnail: 80 },
+        { deviceName: 'Device A', category: 'phones', width: 100, height: 200, dataUri: 'data:a' },
+        { deviceName: 'Device B', category: 'tablets', width: 768, height: 1024, dataUri: 'data:b' },
       ];
       await generateReport(mockReportData, twoDevices, TEST_OUTPUT_DIR);
       const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
@@ -583,88 +470,6 @@ describe('HTML Template Output', () => {
       // This tests that there are no external <link> stylesheet references
       expect(html).not.toContain('<link href="http');
       expect(html).not.toContain("<link href='http");
-    });
-  });
-
-  describe('fold line styles and rendering', () => {
-    it('CSS includes .thumbnail-link::after fold line styles', async () => {
-      await generateReport(mockReportData, [], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toContain('.thumbnail-link::after');
-      expect(html).toContain('var(--fold-position');
-      expect(html).toContain('border-top: 2px dashed');
-    });
-
-    it('CSS includes .lightbox-content::after fold line styles', async () => {
-      await generateReport(mockReportData, [], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toContain('.lightbox-content::after');
-      expect(html).toContain('.lightbox-content {');
-    });
-
-    it('thumbnail card includes --fold-position style when fold is visible', async () => {
-      const screenshot: ScreenshotForReport = {
-        deviceName: 'Test Phone',
-        category: 'phones',
-        width: 375,
-        height: 812,
-        dataUri: 'data:image/png;base64,test',
-        screenshotWidth: 375,
-        screenshotHeight: 2000,
-        foldPositionLightbox: 40.6,
-        foldPositionThumbnail: 63.44, // Non-null means fold is visible
-      };
-      await generateReport(mockReportData, [screenshot], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toMatch(/thumbnail-link.*style="--fold-position: 63\.44%/);
-    });
-
-    it('thumbnail card does NOT include fold style when foldPositionThumbnail is null', async () => {
-      const screenshot: ScreenshotForReport = {
-        deviceName: 'Test PC',
-        category: 'pc-laptops',
-        width: 1920,
-        height: 1080,
-        dataUri: 'data:image/png;base64,test',
-        screenshotWidth: 1920,
-        screenshotHeight: 1080,
-        foldPositionLightbox: 100,
-        foldPositionThumbnail: null, // Fold below visible area
-      };
-      await generateReport(mockReportData, [screenshot], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      // The thumbnail-link should NOT have a style attribute when foldPositionThumbnail is null
-      expect(html).toMatch(/thumbnail-link">\s*<img/);
-    });
-
-    it('lightbox includes class="lightbox-content" wrapper div', async () => {
-      await generateReport(mockReportData, [mockScreenshot], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toContain('class="lightbox-content"');
-    });
-
-    it('lightbox wrapper has --fold-position style', async () => {
-      const screenshot: ScreenshotForReport = {
-        deviceName: 'Test Phone',
-        category: 'phones',
-        width: 375,
-        height: 812,
-        dataUri: 'data:image/png;base64,test',
-        screenshotWidth: 375,
-        screenshotHeight: 2000,
-        foldPositionLightbox: 40.6,
-        foldPositionThumbnail: 63.44,
-      };
-      await generateReport(mockReportData, [screenshot], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toMatch(/lightbox-content.*style="--fold-position: 40\.60%/);
-    });
-
-    it('fold line uses semi-transparent dashed styling', async () => {
-      await generateReport(mockReportData, [], TEST_OUTPUT_DIR);
-      const html = await readFile(join(TEST_OUTPUT_DIR, 'report.html'), 'utf-8');
-      expect(html).toContain('dashed');
-      expect(html).toContain('rgba(255, 100, 100, 0.5)');
     });
   });
 });
@@ -707,7 +512,7 @@ describe('prepareScreenshotsForReport', () => {
     const devices: Device[] = [
       createTestDevice('iPhone 15 Pro', 'phones', 393, 852),
     ];
-    const pngBuffer = createTestPngBuffer(393, 3000);
+    const pngBuffer = createTestPngBuffer(393, 852);
     const results: ExecutionResult[] = [
       createTestResult('iPhone 15 Pro', true, pngBuffer),
     ];
@@ -720,11 +525,6 @@ describe('prepareScreenshotsForReport', () => {
     expect(screenshots[0]?.width).toBe(393);
     expect(screenshots[0]?.height).toBe(852);
     expect(screenshots[0]?.dataUri).toMatch(/^data:image\/png;base64,/);
-    // Verify fold position fields are populated
-    expect(screenshots[0]?.screenshotWidth).toBe(393);
-    expect(screenshots[0]?.screenshotHeight).toBe(3000);
-    expect(screenshots[0]?.foldPositionLightbox).toBeCloseTo(28.4, 1);
-    expect(screenshots[0]?.foldPositionThumbnail).not.toBeNull();
   });
 
   it('skips failed results (success: false)', () => {
@@ -732,7 +532,7 @@ describe('prepareScreenshotsForReport', () => {
       createTestDevice('Device A', 'phones'),
       createTestDevice('Device B', 'phones'),
     ];
-    const pngBuffer = createTestPngBuffer(393, 3000);
+    const pngBuffer = createTestPngBuffer(393, 852);
     const results: ExecutionResult[] = [
       createTestResult('Device A', true, pngBuffer),
       createTestResult('Device B', false, undefined),
@@ -762,7 +562,7 @@ describe('prepareScreenshotsForReport', () => {
 
   it('skips results with unknown device names', () => {
     const devices: Device[] = [createTestDevice('Known Device', 'phones')];
-    const pngBuffer = createTestPngBuffer(393, 3000);
+    const pngBuffer = createTestPngBuffer(393, 852);
     const results: ExecutionResult[] = [
       createTestResult('Known Device', true, pngBuffer),
       createTestResult('Unknown Device', true, pngBuffer),
@@ -779,8 +579,8 @@ describe('prepareScreenshotsForReport', () => {
       { name: 'iPad Pro', width: 1024, height: 1366, deviceScaleFactor: 2, category: 'tablets' },
       { name: 'MacBook Pro', width: 1728, height: 1117, deviceScaleFactor: 2, category: 'pc-laptops' },
     ];
-    const ipadPng = createTestPngBuffer(1024, 3000);
-    const macbookPng = createTestPngBuffer(1728, 2500);
+    const ipadPng = createTestPngBuffer(1024, 1366);
+    const macbookPng = createTestPngBuffer(1728, 1117);
     const results: ExecutionResult[] = [
       createTestResult('iPad Pro', true, ipadPng),
       createTestResult('MacBook Pro', true, macbookPng),
@@ -796,16 +596,13 @@ describe('prepareScreenshotsForReport', () => {
     expect(ipad?.width).toBe(1024);
     expect(ipad?.height).toBe(1366);
     expect(ipad?.dataUri).toContain('base64');
-    expect(ipad?.screenshotWidth).toBe(1024);
-    expect(ipad?.screenshotHeight).toBe(3000);
 
     const macbook = screenshots.find((s) => s.deviceName === 'MacBook Pro');
     expect(macbook).toBeDefined();
     expect(macbook?.category).toBe('pc-laptops');
     expect(macbook?.width).toBe(1728);
     expect(macbook?.height).toBe(1117);
-    expect(macbook?.screenshotWidth).toBe(1728);
-    expect(macbook?.screenshotHeight).toBe(2500);
+    expect(macbook?.dataUri).toContain('base64');
   });
 
   it('handles empty arrays', () => {
@@ -897,10 +694,6 @@ describe('generateReport', () => {
         width: 375,
         height: 812,
         dataUri: 'data:image/png;base64,ABC123',
-        screenshotWidth: 375,
-        screenshotHeight: 2000,
-        foldPositionLightbox: 40.6,
-        foldPositionThumbnail: 63.4,
       },
     ];
 
@@ -915,9 +708,9 @@ describe('generateReport', () => {
 
   it('handles multiple screenshots across categories', async () => {
     const screenshots: ScreenshotForReport[] = [
-      { deviceName: 'Phone', category: 'phones', width: 375, height: 812, dataUri: 'data:phone', screenshotWidth: 375, screenshotHeight: 2000, foldPositionLightbox: 40.6, foldPositionThumbnail: 63.4 },
-      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet', screenshotWidth: 768, screenshotHeight: 2500, foldPositionLightbox: 40.96, foldPositionThumbnail: 64 },
-      { deviceName: 'Desktop', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:desktop', screenshotWidth: 1920, screenshotHeight: 3000, foldPositionLightbox: 36, foldPositionThumbnail: 56.25 },
+      { deviceName: 'Phone', category: 'phones', width: 375, height: 812, dataUri: 'data:phone' },
+      { deviceName: 'Tablet', category: 'tablets', width: 768, height: 1024, dataUri: 'data:tablet' },
+      { deviceName: 'Desktop', category: 'pc-laptops', width: 1920, height: 1080, dataUri: 'data:desktop' },
     ];
 
     const reportPath = await generateReport(mockReportData, screenshots, TEST_OUTPUT_DIR);
@@ -1021,10 +814,6 @@ describe('renderThumbnailCard with preview', () => {
     width: 390,
     height: 844,
     dataUri: 'data:image/png;base64,test',
-    screenshotWidth: 390,
-    screenshotHeight: 2000,
-    foldPositionLightbox: 42.2,
-    foldPositionThumbnail: 65.0,
   };
 
   it('includes preview button with onclick handler', () => {
@@ -1098,10 +887,6 @@ describe('buildReportHtml with modal', () => {
       width: 375,
       height: 812,
       dataUri: 'data:image/png;base64,test',
-      screenshotWidth: 375,
-      screenshotHeight: 1500,
-      foldPositionLightbox: 54.13,
-      foldPositionThumbnail: 84.3,
     }];
 
     await generateReport(data, screenshots, TEST_OUTPUT_DIR);
@@ -1124,10 +909,6 @@ describe('buildReportHtml with modal', () => {
       width: 375,
       height: 812,
       dataUri: 'data:image/png;base64,test',
-      screenshotWidth: 375,
-      screenshotHeight: 1500,
-      foldPositionLightbox: 54.13,
-      foldPositionThumbnail: 84.3,
     }];
 
     await generateReport(data, screenshots, TEST_OUTPUT_DIR);
