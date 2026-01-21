@@ -645,9 +645,11 @@ function renderHeader(data: ReportData): string {
 }
 
 /**
- * Render a single thumbnail card
+ * Render a single thumbnail card with lightbox link and preview button
+ * @param screenshot Screenshot data for the card
+ * @param url URL of the captured site for interactive preview
  */
-function renderThumbnailCard(screenshot: ScreenshotForReport): string {
+export function renderThumbnailCard(screenshot: ScreenshotForReport, url: string): string {
   const lightboxId = generateLightboxId(
     screenshot.deviceName,
     screenshot.width,
@@ -659,12 +661,16 @@ function renderThumbnailCard(screenshot: ScreenshotForReport): string {
     ? ` style="--fold-position: ${screenshot.foldPositionThumbnail.toFixed(2)}%;"`
     : '';
 
+  const escapedDeviceName = escapeHtml(screenshot.deviceName);
+  const escapedUrl = escapeHtml(url);
+
   return `<div class="thumbnail-card">
     <a href="#${lightboxId}" class="thumbnail-link"${foldStyle}>
-      <img src="${screenshot.dataUri}" alt="${escapeHtml(screenshot.deviceName)}">
+      <img src="${screenshot.dataUri}" alt="${escapedDeviceName}">
     </a>
+    <button type="button" class="preview-btn" onclick="openPreview('${escapedUrl}', ${screenshot.width}, ${screenshot.height})" aria-label="Preview ${escapedDeviceName} at ${screenshot.width}x${screenshot.height}">Preview</button>
     <div class="thumbnail-info">
-      <div class="device-name">${escapeHtml(screenshot.deviceName)}</div>
+      <div class="device-name">${escapedDeviceName}</div>
       <div class="dimensions">${screenshot.width} x ${screenshot.height}</div>
     </div>
   </div>`;
@@ -672,13 +678,17 @@ function renderThumbnailCard(screenshot: ScreenshotForReport): string {
 
 /**
  * Render a category section with all its thumbnails
+ * @param category Device category (phones, tablets, pc-laptops)
+ * @param screenshots Screenshots for this category
+ * @param url URL of the captured site for interactive preview
  */
 function renderCategory(
   category: DeviceCategory,
-  screenshots: ScreenshotForReport[]
+  screenshots: ScreenshotForReport[],
+  url: string
 ): string {
   const displayName = getCategoryDisplayName(category);
-  const thumbnails = screenshots.map(renderThumbnailCard).join('\n    ');
+  const thumbnails = screenshots.map((s) => renderThumbnailCard(s, url)).join('\n    ');
 
   return `<section class="category-section">
     <h2>${displayName}</h2>
@@ -727,7 +737,7 @@ function buildReportHtml(
   for (const category of categoryOrder) {
     const categoryScreenshots = grouped.get(category);
     if (categoryScreenshots && categoryScreenshots.length > 0) {
-      categorySections.push(renderCategory(category, categoryScreenshots));
+      categorySections.push(renderCategory(category, categoryScreenshots, data.url));
     }
   }
 
