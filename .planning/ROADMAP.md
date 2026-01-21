@@ -1,6 +1,6 @@
 # Milestone v3.0: Viewport-First Capture
 
-**Status:** In Progress
+**Status:** Complete
 **Phases:** 21-23
 **Total Plans:** 5
 
@@ -12,7 +12,7 @@ Transform default capture behavior from full-page to viewport-only screenshots, 
 
 - [x] **Phase 21: Capture Engine Changes** - Change default capture to viewport-only, add --full-page flag
 - [x] **Phase 22: Report Cleanup** - Remove fold line indicators from report
-- [ ] **Phase 23: Documentation & Release** - Update docs, bump version to 3.0.0
+- [x] **Phase 23: Documentation & Release** - Update docs, bump version to 3.0.0
 
 ## Phase Details
 
@@ -76,8 +76,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 23-01-PLAN.md — Update documentation with --full-page flag and viewport-only default
-- [ ] 23-02-PLAN.md — Create CHANGELOG and bump version to 3.0.0
+- [x] 23-01-PLAN.md — Update documentation with --full-page flag and viewport-only default
+- [x] 23-02-PLAN.md — Create CHANGELOG and bump version to 3.0.0
 
 ---
 
@@ -91,12 +91,12 @@ Plans:
 | RPT-01 | 22 | Complete |
 | RPT-02 | 22 | Complete |
 | RPT-03 | 22 | Complete |
-| DOC-01 | 23 | Pending |
-| DOC-02 | 23 | Pending |
-| DOC-03 | 23 | Pending |
-| DOC-04 | 23 | Pending |
-| VER-01 | 23 | Pending |
-| VER-02 | 23 | Pending |
+| DOC-01 | 23 | Complete |
+| DOC-02 | 23 | Complete |
+| DOC-03 | 23 | Complete |
+| DOC-04 | 23 | Complete |
+| VER-01 | 23 | Complete |
+| VER-02 | 23 | Complete |
 
 **Coverage:** 12/12 (100%)
 
@@ -108,9 +108,9 @@ Plans:
 |-------|----------------|--------|-----------|
 | 21. Capture Engine Changes | 2/2 | Complete | 2026-01-21 |
 | 22. Report Cleanup | 1/1 | Complete | 2026-01-22 |
-| 23. Documentation & Release | 0/2 | Planned | - |
+| 23. Documentation & Release | 2/2 | Complete | 2026-01-22 |
 
 ---
 
 *Created: 2026-01-21*
-*Last updated: 2026-01-22 (Phase 23 planned)*
+*Last updated: 2026-01-22 (v3.0 COMPLETE)*

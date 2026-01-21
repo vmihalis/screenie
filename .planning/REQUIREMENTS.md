@@ -21,15 +21,15 @@ Requirements for viewport-first capture release. Breaking change from full-page 
 
 ### Documentation
 
-- [ ] **DOC-01**: Update CLI reference with new default behavior
-- [ ] **DOC-02**: Document `--full-page` flag usage
-- [ ] **DOC-03**: README reflects viewport-only as default
-- [ ] **DOC-04**: Changelog documents breaking change clearly
+- [x] **DOC-01**: Update CLI reference with new default behavior
+- [x] **DOC-02**: Document `--full-page` flag usage
+- [x] **DOC-03**: README reflects viewport-only as default
+- [x] **DOC-04**: Changelog documents breaking change clearly
 
 ### Version
 
-- [ ] **VER-01**: Bump major version to 3.0.0
-- [ ] **VER-02**: Update ASCII banner version display
+- [x] **VER-01**: Bump major version to 3.0.0
+- [x] **VER-02**: Update ASCII banner version display
 
 ## Future Requirements
 
@@ -59,12 +59,12 @@ Deferred to v3.1+:
 | RPT-01 | Phase 22 | Complete |
 | RPT-02 | Phase 22 | Complete |
 | RPT-03 | Phase 22 | Complete |
-| DOC-01 | Phase 23 | Pending |
-| DOC-02 | Phase 23 | Pending |
-| DOC-03 | Phase 23 | Pending |
-| DOC-04 | Phase 23 | Pending |
-| VER-01 | Phase 23 | Pending |
-| VER-02 | Phase 23 | Pending |
+| DOC-01 | Phase 23 | Complete |
+| DOC-02 | Phase 23 | Complete |
+| DOC-03 | Phase 23 | Complete |
+| DOC-04 | Phase 23 | Complete |
+| VER-01 | Phase 23 | Complete |
+| VER-02 | Phase 23 | Complete |
 
 **Coverage:**
 - v3.0 requirements: 12 total
@@ -73,4 +73,4 @@ Deferred to v3.1+:
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-22 after Phase 22 complete*
+*Last updated: 2026-01-22 (v3.0 COMPLETE - all requirements satisfied)*
