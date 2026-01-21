@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "commander": "^12.0.0",
+    "figlet": "^1.9.4",
     "open": "^11.0.0",
     "ora": "^8.0.0",
     "p-limit": "^6.0.0",
@@ -41,6 +42,7 @@
     "update-notifier": "^7.3.1"
   },
   "devDependencies": {
+    "@types/figlet": "^1.7.0",
     "@types/node": "^20.0.0",
     "@types/update-notifier": "^6.0.8",
     "execa": "^9.6.1",
