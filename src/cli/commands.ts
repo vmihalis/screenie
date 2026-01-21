@@ -44,6 +44,9 @@ export function createProgram(): Command {
     // Browser auto-open control
     .option('--no-open', 'Suppress auto-opening report in browser')
 
+    // Capture mode
+    .option('--full-page', 'Capture full scrollable page instead of viewport-only')
+
     // Help examples
     .addHelpText(
       'after',
@@ -55,6 +58,7 @@ Examples:
   $ screenie http://localhost:3000 --phones-only --concurrency 5
   $ screenie http://localhost:3000 --wait 1000 --output ./my-screenshots
   $ screenie http://localhost:3000 --no-open  # CI mode, don't open browser
+  $ screenie http://localhost:3000 --full-page  # Capture entire scrollable page
 `
     );
 
